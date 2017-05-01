@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class BoatController : MonoBehaviour {
 
+    // 銛発射のためのObj
     public GameObject boatSpear;
     BoatSpear boatSpearScript;
+
     public float MaxDamageTime;
     public int MaxHP;
 
     float DamageTime;
     int HitPoint;
     bool isDead;
-    bool isDamage;
+    bool isDamage;  // ダメージ時間中か
     bool isAttack;
-    bool isLeft;
+    bool isLeft;    // 左向いてるか
 
     Animator anime;
 
@@ -43,11 +45,12 @@ public class BoatController : MonoBehaviour {
             {
                 DamageTime = 0.0f;
                 isDamage = false;
-                anime.SetBool("IsDamage", isDamage);
+                anime.SetBool("IsDamage", isDamage);    // ダメージ中アニメに切り替え
             }
         }
         else
         {
+            // ダメージ時間中でなければ攻撃する
             SpearAttack();
         }
     }
@@ -63,6 +66,8 @@ public class BoatController : MonoBehaviour {
     }
 
     // ボートダメージ処理
+    // @return true     ダメージ処理できた
+    //         false    ダメージ時間中
     public bool DamageBoat( int AttackPower )
     {
         // ダメージ時間中なら処理しない
@@ -75,7 +80,6 @@ public class BoatController : MonoBehaviour {
 
         // ダメージ処理
         HitPoint -= AttackPower;
-        //Debug.Log("HitPoint : " + HitPoint);
         if(HitPoint <= 0)
         {
             isDead = true;
