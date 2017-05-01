@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class DolphinController : MonoBehaviour {
 
-    const float MOVE_X_VALUE = 1.0f;
-    const float MOVE_Y_VALUE = 1.0f;
-
     const float MAX_ACCEL_X = 0.15f;
     const float MAX_ACCEL_Y = 0.15f;
     const float MIN_ACCEL_X = -MAX_ACCEL_X;
