@@ -14,9 +14,9 @@ public class BoatController : MonoBehaviour {
     float DamageTime;
     int HitPoint;
     bool isDead;
-    bool isDamage;  // ダメージ時間中か
+    bool isDamage;      // ダメージ時間中か
     bool isAttack;
-    bool isLeft;    // 左向いてるか
+    bool isLeft;        // 左向いてるか
 
     Animator anime;
 

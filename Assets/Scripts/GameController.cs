@@ -14,6 +14,7 @@ public class GameController : MonoBehaviour {
     public float createMinY, createMaxY;
     public GameObject japBoat;      // ボートObj
     public GameObject itemHeart;    // ハートアイテムObj
+    public GameObject explosion;    // 爆発エフェクトObj
 
     public Text ScoreLabel;         // スコア
     public Text GameOverLabel;      // ゲームオーバーテキスト
@@ -35,7 +36,7 @@ public class GameController : MonoBehaviour {
         GameObject dolpObj = GameObject.FindWithTag("Player");
         dolphinCtrl = dolpObj.GetComponent<DolphinController>();
 
-        itemDropRatio = 1 / 3.0f;   // アイテムドロップ率設定
+        itemDropRatio = 1 / 5.0f;   // アイテムドロップ率設定
         IsGameOver = false;
         HasPushRetry = false;
     }
@@ -121,5 +122,21 @@ public class GameController : MonoBehaviour {
                 new Vector3(dropPosX, dropPosY, 0.0f),
                 Quaternion.identity);
         itemObj.SetActive(true);
+    }
+
+    // 爆発エフェクト生成
+    public void CreateExplosionEffect(float posX, float posY)
+    {
+        GameObject createObj =
+            (GameObject)Instantiate(
+                explosion,
+                new Vector3(posX, posY, 0.0f),
+                Quaternion.identity);
+
+        createObj.SetActive(true);  // 有効に
+        ExplosionEffect expEffScript = createObj.GetComponent<ExplosionEffect>();
+
+        // 爆発アニメ開始
+        expEffScript.StartAnime();
     }
 }
