@@ -12,7 +12,8 @@ public class GameController : MonoBehaviour {
     // ボート生成時の最大、最小座標
     public float createMinX, createMaxX;
     public float createMinY, createMaxY;
-    public GameObject japBoat;
+    public GameObject japBoat;      // ボートObj
+    public GameObject itemHeart;    // ハートアイテムObj
 
     public Text ScoreLabel;         // スコア
     public Text GameOverLabel;      // ゲームオーバーテキスト
@@ -20,6 +21,8 @@ public class GameController : MonoBehaviour {
     public HPPanel hpPanelScript;   // HP表示スクリプト
 
     DolphinController dolphinCtrl;
+
+    float itemDropRatio;            // アイテムドロップ率
     bool IsGameOver;
     bool HasPushRetry;
 
@@ -32,6 +35,7 @@ public class GameController : MonoBehaviour {
         GameObject dolpObj = GameObject.FindWithTag("Player");
         dolphinCtrl = dolpObj.GetComponent<DolphinController>();
 
+        itemDropRatio = 1 / 3.0f;   // アイテムドロップ率設定
         IsGameOver = false;
         HasPushRetry = false;
     }
@@ -101,5 +105,21 @@ public class GameController : MonoBehaviour {
         IsGameOver = false;
         HasPushRetry = true;
         Application.LoadLevel("DolphinJapan");
+    }
+
+    // アイテムドロップ
+    public void DropItem(float dropPosX, float dropPosY)
+    {
+        // 0.0～1.0からの値をランダムで取得して
+        // 指定割合以下ならアイテムドロップする
+        if (Random.value > itemDropRatio) return;
+
+        // ボートが居た場所にドロップする
+        GameObject itemObj =
+            (GameObject)Instantiate(
+                itemHeart,
+                new Vector3(dropPosX, dropPosY, 0.0f),
+                Quaternion.identity);
+        itemObj.SetActive(true);
     }
 }
