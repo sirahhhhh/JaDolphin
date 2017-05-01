@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class ItemHeart : MonoBehaviour
 {
+    // 回復SEをこちらに持たせようと思ったけど
+    // アイテムを取得させてスプライトを消すのと
+    // SE再生が両立しないので要調査
+
     public DolphinController dolphinCtrl;
     public GameObject itemHeart;
 
@@ -18,7 +22,6 @@ public class ItemHeart : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
     }
 
     // アイテム取得
@@ -29,7 +32,7 @@ public class ItemHeart : MonoBehaviour
         if(collision.gameObject.tag == "Player")
         {
             dolphinCtrl.IncreaseHP(healHitPoint);
-            itemHeart.SetActive(false);
+            Destroy(itemHeart);
         }
     }
 }
