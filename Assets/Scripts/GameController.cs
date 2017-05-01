@@ -127,10 +127,12 @@ public class GameController : MonoBehaviour {
     // 爆発エフェクト生成
     public void CreateExplosionEffect(float posX, float posY)
     {
+        float adjustY = 0.1f;   // 少し下側に表示する
+
         GameObject createObj =
             (GameObject)Instantiate(
                 explosion,
-                new Vector3(posX, posY, 0.0f),
+                new Vector3(posX, posY - adjustY, 0.0f),
                 Quaternion.identity);
 
         createObj.SetActive(true);  // 有効に

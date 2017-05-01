@@ -27,7 +27,7 @@ public class DolphinController : MonoBehaviour {
     GameObject gameControllerObj;
     GameController gameCtrl;
     Animator DolphinAnimator;
-    AudioSource hitSE;          // 攻撃時SE
+    AudioSource hitSE;      // 攻撃時SE
 
     // 移動制限値
     public float moveMinX, moveMaxX;
@@ -162,6 +162,8 @@ public class DolphinController : MonoBehaviour {
     {
         //　敵の攻撃なら処理しない
         if (collision.gameObject.tag == "EnemyAttack") return;
+        //　アイテムなら処理しない
+        if (collision.gameObject.tag == "Items") return;
 
         BoatController BoatCtrl = collision.gameObject.GetComponent<BoatController>();
 
