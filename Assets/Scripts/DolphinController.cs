@@ -175,6 +175,8 @@ public class DolphinController : MonoBehaviour {
         {
             // 船沈め
             gameCtrl.DownBoat();
+            // 爆発エフェクト
+            gameCtrl.CreateExplosionEffect(BoatCtrl.GetPosX(), BoatCtrl.GetPosY());
             // アイテムドロップ
             gameCtrl.DropItem(BoatCtrl.GetPosX(), BoatCtrl.GetPosY());
             //collision.gameObject.SetActive(false);
