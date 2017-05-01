@@ -5,17 +5,18 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
-    const float CREATE_TIME = 1.0f;
-    float passTime;
-    int DownBoats;
+    const float CREATE_TIME = 1.0f; // ボート生成時間
+    float passTime; // 生成時に使う経過時間
+    int DownBoats;  // 沈めたボート数
 
+    // ボート生成時の最大、最小座標
     public float createMinX, createMaxX;
     public float createMinY, createMaxY;
     public GameObject japBoat;
 
-    public Text ScoreLabel;
-    public Text GameOverLabel;
-    public Button RetryButton;
+    public Text ScoreLabel;     // スコア
+    public Text GameOverLabel;  // ゲームオーバーテキスト
+    public Button RetryButton;  // リトライボタン
 
     DolphinController dolphinCtrl;
     bool IsGameOver;
@@ -23,9 +24,10 @@ public class GameController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        passTime = Time.time;
-        japBoat.SetActive(false);
+        passTime = Time.time;       // 経過時間に現在の時間を設定
+        japBoat.SetActive(false);   // コピー元Objをdeactive
 
+        // ゲームオーバー用にイルカの生存フラグをみる
         GameObject dolpObj = GameObject.FindWithTag("Player");
         dolphinCtrl = dolpObj.GetComponent<DolphinController>();
 
@@ -35,8 +37,6 @@ public class GameController : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        //if (IsGameOver) return;
-
         // ボート生成
         CreateBoat();
 
@@ -52,12 +52,15 @@ public class GameController : MonoBehaviour {
         }
 	}
 
+    // ボート生成
     void CreateBoat()
     {
+        // 生成時間を過ぎたらつくる
         float nowTime = Time.time;
         if ((Time.time - passTime) < CREATE_TIME) return;
         passTime = nowTime;
 
+        // 座標はランダムで決定
         float createX = Random.Range(createMinX, createMaxX);
         float createY = Random.Range(createMinY, createMaxY);
 
@@ -79,12 +82,15 @@ public class GameController : MonoBehaviour {
         RetryButton.gameObject.SetActive(true);
     }
 
+    // ボートが沈んだら
+    // 現状、沈めたボート数を加算する
     public void DownBoat()
     {
         DownBoats++;
         Debug.Log("downs : " + DownBoats);
     }
 
+    // リトライボタン押下時
     public void PushRetry()
     {
         Time.timeScale = 1.0f;
