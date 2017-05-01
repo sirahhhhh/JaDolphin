@@ -14,9 +14,10 @@ public class GameController : MonoBehaviour {
     public float createMinY, createMaxY;
     public GameObject japBoat;
 
-    public Text ScoreLabel;     // スコア
-    public Text GameOverLabel;  // ゲームオーバーテキスト
-    public Button RetryButton;  // リトライボタン
+    public Text ScoreLabel;         // スコア
+    public Text GameOverLabel;      // ゲームオーバーテキスト
+    public Button RetryButton;      // リトライボタン
+    public HPPanel hpPanelScript;   // HP表示スクリプト
 
     DolphinController dolphinCtrl;
     bool IsGameOver;
@@ -42,6 +43,9 @@ public class GameController : MonoBehaviour {
 
         // スコア表示
         ScoreLabel.text = "しずめた数 : " + DownBoats;
+
+        // HP表示
+        hpPanelScript.UpdateHPPanel(dolphinCtrl.GetHP());
 
         if (!dolphinCtrl.GetIsAlive())
         {
