@@ -85,9 +85,6 @@ public class DolphinController : MonoBehaviour {
     // 移動処理
     void Move()
     {
-        float moveX = 0.0f;
-        float moveY = 0.0f;
-
         // 横方向
         if (Input.GetKey("left"))
         {
@@ -178,6 +175,8 @@ public class DolphinController : MonoBehaviour {
         {
             // 船沈め
             gameCtrl.DownBoat();
+            // アイテムドロップ
+            gameCtrl.DropItem(BoatCtrl.GetPosX(), BoatCtrl.GetPosY());
             //collision.gameObject.SetActive(false);
             // ボート破棄
             Destroy(collision.gameObject);
@@ -193,10 +192,11 @@ public class DolphinController : MonoBehaviour {
         // 敵の攻撃
         if (collision.gameObject.tag == "EnemyAttack")
         {
-            BoatSpear boatSpearScript = collision.gameObject.GetComponent<BoatSpear>();
-            int enemyAttackPower = boatSpearScript.GetAttackPower();
-
+            // 敵の攻撃力でイルカの体力減らす数を変えるか保留
+            //BoatSpear boatSpearScript = collision.gameObject.GetComponent<BoatSpear>();
+            //int enemyAttackPower = boatSpearScript.GetAttackPower();
             //HitPoint -= enemyAttackPower;
+
             HitPoint -= 1;
             isDamage = true;
             DolphinAnimator.SetBool("IsDamage", true);
@@ -221,5 +221,14 @@ public class DolphinController : MonoBehaviour {
     public int GetHP()
     {
         return HitPoint;
+    }
+
+    // HP加算
+    public void IncreaseHP(int incHP)
+    {
+        if (incHP <= 0) return;                 // 引数が0以下なら処理しない
+        if (HitPoint >= MaxHitPoint) return;    // 現在のHPが最大値なら処理しない
+
+        HitPoint += incHP;
     }
 }

@@ -93,4 +93,14 @@ public class BoatController : MonoBehaviour {
     {
         return isDead;
     }
+
+    public float GetPosX()
+    {
+        return transform.position.x;
+    }
+
+    public float GetPosY()
+    {
+        return transform.position.y;
+    }
 }
