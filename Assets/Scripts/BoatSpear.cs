@@ -17,8 +17,9 @@ public class BoatSpear : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        // 銛の速度は現状、等加速度
-        SpearSpeed = MaxSpearSpeed;
+        // 銛の速度と進む向きを決定
+		SpearSpeed = MaxSpearSpeed + Random.Range(0.0f, 0.03f);
+		if(isLeft) SpearSpeed = - SpearSpeed;
     }
 	
 	// Update is called once per frame
@@ -29,8 +30,7 @@ public class BoatSpear : MonoBehaviour {
         float posX = transform.position.x;
         float posY = transform.position.y;
 
-        if(isLeft) posX -= SpearSpeed;
-        else       posX += SpearSpeed;
+		posX += SpearSpeed;
 
         SpearAliveTime -= Time.deltaTime;
         if(SpearAliveTime <= 0.0f)
@@ -47,8 +47,8 @@ public class BoatSpear : MonoBehaviour {
 
     // 銛発射
     // @param a_isLeft  左向きか
-    public void ShotSpear(bool a_isLeft)
-    {
+	public void ShotSpear(bool a_isLeft)
+	{
         this.gameObject.SetActive(true);
         isAlive = true;
         isLeft = a_isLeft;
@@ -56,7 +56,7 @@ public class BoatSpear : MonoBehaviour {
         // AwakeやStartより早くここを通るので
         // ここで設定しておく
         anime = GetComponent<Animator>();
-        anime.SetBool("IsLeft", isLeft);
+		anime.SetBool("IsLeft", isLeft);
 
         SpearAliveTime = MaxSpearAliveTime;
     }
