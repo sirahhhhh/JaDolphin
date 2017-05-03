@@ -79,6 +79,7 @@ public class GameController : MonoBehaviour {
             Quaternion.identity);
         Obj.SetActive(true);
     }
+		
 
     // ゲームオーバー処理
     void GameOver()

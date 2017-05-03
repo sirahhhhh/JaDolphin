@@ -66,4 +66,5 @@ public class BoatSpear : MonoBehaviour {
     {
         return AttackPower;
     }
+
 }
