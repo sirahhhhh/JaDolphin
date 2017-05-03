@@ -9,6 +9,13 @@ public class GameController : MonoBehaviour {
     float passTime; // 生成時に使う経過時間
     int DownBoats;  // 沈めたボート数
 
+	//援軍の船用パラメータ
+	public CompanyBoat companyBoats;
+	int MaxCompanyBoats = 5;
+	int CurrentCompanyBoats = 0;
+	const float CompanyBoatsCreateTime = 10.0f; // ボート生成時間
+	float CompanyBoatsPassTime; // 生成時に使う経過時間
+
     // ボート生成時の最大、最小座標
     public float createMinX, createMaxX;
     public float createMinY, createMaxY;
@@ -45,6 +52,7 @@ public class GameController : MonoBehaviour {
     void Update () {
         // ボート生成
         CreateBoat();
+		CreateCompanyBoat();
 
         // スコア表示
         ScoreLabel.text = "しずめた数 : " + DownBoats;
@@ -79,7 +87,28 @@ public class GameController : MonoBehaviour {
             Quaternion.identity);
         Obj.SetActive(true);
     }
-		
+
+	// 援軍のボート生成
+	void CreateCompanyBoat()
+	{
+		// 生成できる上限なら抜ける
+		if (CurrentCompanyBoats >= MaxCompanyBoats) return;
+
+		// 生成時間を過ぎたらつくる
+		if ((Time.time - CompanyBoatsPassTime) < CompanyBoatsCreateTime) return;
+		CompanyBoatsPassTime = Time.time;
+
+		// 座標はランダムで決定
+		float createX = Random.Range(createMinX, createMaxX);
+		float createY = Random.Range(createMinY, createMaxY);
+		/*
+		GameObject Obj = (GameObject)Instantiate(
+			CompanyBoat,
+			new Vector3(createX, createY, 0.0f),
+			Quaternion.identity);
+		Obj.SetActive(true);
+		*/
+	}
 
     // ゲームオーバー処理
     void GameOver()
