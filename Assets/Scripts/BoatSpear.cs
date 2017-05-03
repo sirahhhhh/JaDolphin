@@ -9,9 +9,11 @@ public class BoatSpear : MonoBehaviour {
     public float MaxSpearAliveTime; // 銛の存在する最大時間
     public int AttackPower;         // 銛攻撃力
 
-    bool isAlive;                   // 銛存在フラグ
+    Animator anime; // 銛の左右切り替えアニメ
     float SpearSpeed;               // 銛速度
     float SpearAliveTime;           // 銛存在時間
+    bool isAlive;                   // 銛存在フラグ
+    bool isLeft;                    // 左向きか
 
     // Use this for initialization
     void Start () {
@@ -27,25 +29,36 @@ public class BoatSpear : MonoBehaviour {
         float posX = transform.position.x;
         float posY = transform.position.y;
 
-        posX += SpearSpeed;
+        if(isLeft) posX -= SpearSpeed;
+        else       posX += SpearSpeed;
+
         SpearAliveTime -= Time.deltaTime;
         if(SpearAliveTime <= 0.0f)
         {
             // 銛削除
             isAlive = false;
             SpearAliveTime = 0.0f;
-            this.gameObject.SetActive(false);
+            //this.gameObject.SetActive(false);
+            Destroy(this.gameObject);
         }
 
         transform.position = new Vector3(posX, posY, 0.0f);
     }
 
     // 銛発射
-    public void ShotSpear()
+    // @param a_isLeft  左向きか
+    public void ShotSpear(bool a_isLeft)
     {
-        isAlive = true;
-        SpearAliveTime = MaxSpearAliveTime;
         this.gameObject.SetActive(true);
+        isAlive = true;
+        isLeft = a_isLeft;
+
+        // AwakeやStartより早くここを通るので
+        // ここで設定しておく
+        anime = GetComponent<Animator>();
+        anime.SetBool("IsLeft", isLeft);
+
+        SpearAliveTime = MaxSpearAliveTime;
     }
 
     // 攻撃(銛)の攻撃力取得
