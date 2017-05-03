@@ -17,6 +17,7 @@ public class BoatController : MonoBehaviour {
     public GameObject boatSpear;
     BoatSpear boatSpearScript;
 
+    public float StartActTime;          // 行動を開始する時間
     public float MaxDamageTime;         // ダメージ時間の最大時間
     public float MaxAttackIntervalTime; // 攻撃間隔の最大時間
     public float MaxActIntervalTime;    // 行動間隔の最大時間
@@ -31,6 +32,7 @@ public class BoatController : MonoBehaviour {
     bool isAttack;
     bool isLeft;        // 左向いてるか
     bool isActed;       // 行動時間中か
+    bool isStartAct;    // 行動開始するか
 
     Animator anime;
 
@@ -47,14 +49,30 @@ public class BoatController : MonoBehaviour {
         isDead      = false;
         isDamage    = false;
         isAttack    = false;
-        isLeft      = false;
         isActed     = false;
+        isStartAct = false;
+
+        // 左右をランダムで決める
+        int ran = Random.Range(0, 1);
+        if(ran == 0)    isLeft = false;
+        else            isLeft = true;
 
         anime = GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
 	void Update () {
+        // 行動開始するまでの待機処理
+        if (!isStartAct)
+        {
+            StartActTime -= Time.deltaTime;
+            if (StartActTime <= 0.0f)
+            {
+                // 行動開始
+                isStartAct = true;
+            }
+        }
+
         // 攻撃中なら攻撃間隔時間を減らして0以下になれば
         // 次の攻撃が出来る
         if (isAttack)
@@ -67,20 +85,24 @@ public class BoatController : MonoBehaviour {
             }
         }
 
-        // 行動後時間中待機処理
-        if (isActed)
+        // 行動開始しているなら
+        if (isStartAct)
         {
-            actIntervalTime -= Time.deltaTime;
-            if(actIntervalTime <= 0.0f)
+            // 行動後時間中待機処理
+            if (isActed)
             {
-                actIntervalTime = MaxActIntervalTime;
-                isActed = false;
+                actIntervalTime -= Time.deltaTime;
+                if (actIntervalTime <= 0.0f)
+                {
+                    actIntervalTime = MaxActIntervalTime;
+                    isActed = false;
+                }
             }
-        }
-        else
-        {
-            // 行動後時間中でなければ行動
-            Act();
+            else
+            {
+                // 行動後時間中でなければ行動
+                Act();
+            }
         }
 		// 船を移動させる
 		Move ();
@@ -149,8 +171,8 @@ public class BoatController : MonoBehaviour {
     {
         // ダメージ時間中でも行動するか要検討
 
-        // 0～3のどれかをランダムに引く
-        int ran = (int)(Random.value * 10 % (int)eBOAT_ACT.MAX_ACT);
+        // 行動番号をランダムに引く
+        int ran = Random.Range(0, (int)eBOAT_ACT.MAX_ACT);
         switch(ran)
         {
             // 何もしない、待機
