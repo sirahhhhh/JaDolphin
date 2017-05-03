@@ -703,7 +703,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: 0.64, y: 0.64}
+  m_Size: {x: 0.64, y: 0.5}
 --- !u!1 &671626716
 GameObject:
   m_ObjectHideFlags: 0
@@ -808,9 +808,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.15}
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.1, y: 0.7}
 --- !u!212 &672138584
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -873,7 +873,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boatSpear: {fileID: 878442896}
-  MaxDamageTime: 2
+  MaxDamageTime: 0.5
+  MaxAttackIntervalTime: 1.3
+  MaxActIntervalTime: 3
   MaxHP: 100
 --- !u!95 &672138587
 Animator:
@@ -1033,7 +1035,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 878442896}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: -0.25, z: 0}
+  m_LocalPosition: {x: 0.5, y: -0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 672138585}
@@ -1051,7 +1053,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxSpearSpeed: 0.03
-  MaxSpearAliveTime: 1
+  MaxSpearAliveTime: 2
   AttackPower: 30
 --- !u!95 &878442899
 Animator:
@@ -1381,7 +1383,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -327.1, y: -59}
+  m_AnchoredPosition: {x: -327.0996, y: -59}
   m_SizeDelta: {x: 200, y: 38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1025400744
