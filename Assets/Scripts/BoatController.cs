@@ -82,6 +82,8 @@ public class BoatController : MonoBehaviour {
             // 行動後時間中でなければ行動
             Act();
         }
+		// 船を移動させる
+		Move ();
 
         // ダメージ時間減衰
         // ダメージ受けて一定時間は次のダメージを受けない
@@ -129,6 +131,19 @@ public class BoatController : MonoBehaviour {
         isAttack = true;
     }
 
+	// 船を進行方向へ移動させる
+	void Move()
+	{
+		// 移動距離の設定
+		float moveX = 0.01f;
+		if (isLeft)	{moveX = -1 * moveX;}
+
+		// 現在地から移動距離分だけ進める
+		Vector3 pos = transform.position;
+		pos.x += moveX;
+		transform.position = pos;
+	}
+
     // ボート行動
     void Act()
     {
@@ -159,6 +174,7 @@ public class BoatController : MonoBehaviour {
             //    // ダメージ時間中でなければ攻撃する
             //    SpearAttack();
             //    break;
+
         }
         isActed = true;
     }

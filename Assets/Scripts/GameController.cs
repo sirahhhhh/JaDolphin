@@ -17,7 +17,7 @@ public class GameController : MonoBehaviour {
     public GameObject explosion;    // 爆発エフェクトObj
 
     public Text ScoreLabel;         // スコア
-    public Text GameOverLabel;      // ゲームオーバーテキスト
+	public Text GameOverLabel;      // ゲームオーバーテキスト
     public Button RetryButton;      // リトライボタン
     public HPPanel hpPanelScript;   // HP表示スクリプト
 
@@ -79,6 +79,7 @@ public class GameController : MonoBehaviour {
             Quaternion.identity);
         Obj.SetActive(true);
     }
+		
 
     // ゲームオーバー処理
     void GameOver()
@@ -88,6 +89,7 @@ public class GameController : MonoBehaviour {
         Time.timeScale = 0.0f;
         IsGameOver = true;
         GameOverLabel.gameObject.SetActive(true);
+		GameOverLabel.text = "m9(^Д^)";
         RetryButton.gameObject.SetActive(true);
     }
 
