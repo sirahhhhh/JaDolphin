@@ -133,9 +133,16 @@ public class BoatController : MonoBehaviour {
 	// 船を進行方向へ移動させる
 	void Move()
 	{
+		// 画面外に出そうなら反転
+		if (transform.position.x >= 4.0f || transform.position.x <= -4.0f)
+		{
+			isLeft = !isLeft;
+			anime.SetBool ("IsLeft", isLeft);
+		}
+
 		// 移動距離の設定
 		float moveX = 0.01f;
-		if (isLeft)	{moveX = - moveX;}
+		if (isLeft)	moveX = - moveX;
 
 		// 現在地から移動距離分だけ進める
 		transform.position = new Vector3(
