@@ -7,8 +7,9 @@ public class BoatController : MonoBehaviour {
     enum eBOAT_ACT
     {
         IDLE,                      // なにもしない
-        CHANGE_DIRECTION_LEFT,     // 左を向く
-        CHANGE_DIRECTION_RIGHT,    // 右を向く
+		CHANGE_DIRECTION,			// 向きを変える
+//        CHANGE_DIRECTION_LEFT,     // 左を向く
+//        CHANGE_DIRECTION_RIGHT,    // 右を向く
 //        SHOT_SPEAR,                // 銛を撃つ
         MAX_ACT,
     }
@@ -132,38 +133,45 @@ public class BoatController : MonoBehaviour {
         // 攻撃中なら中断
         if (isAttack) return;
 
-        // 右向きの場合、コピー元の銛と同じの座標に生成
-        float createPosX = boatSpear.gameObject.transform.position.x;
-        float createPosY = boatSpear.gameObject.transform.position.y;
+		// 左向きの場合、コピー元の銛から少し左にずらす
+		float adjustPosX = 0.0f;
+		if (isLeft) adjustPosX = -1.0f;
 
-        // 左向きの場合、コピー元の銛から少し左にずらす
-        float adjustPosX = -1.0f;
-        if (isLeft) { createPosX += adjustPosX; }
-
-        GameObject createObj = (GameObject)Instantiate(
+        // 銛の生成
+		GameObject createObj = (GameObject)Instantiate(
             boatSpear,
-            new Vector3(createPosX,
-                        createPosY,
-                        0.0f),
+				new Vector3(
+					boatSpear.gameObject.transform.position.x + adjustPosX,
+					boatSpear.gameObject.transform.position.y,
+                    0.0f),
             Quaternion.identity);
         createObj.transform.parent = this.gameObject.transform; // 生成した銛の親を生成元ボートに設定
 
         boatSpearScript = createObj.GetComponent<BoatSpear>();
-        boatSpearScript.ShotSpear(isLeft);
-        isAttack = true;
+		boatSpearScript.ShotSpear(isLeft);
+		isAttack = true;
     }
 
 	// 船を進行方向へ移動させる
 	void Move()
 	{
+		// 画面外に出そうなら反転
+		if (transform.position.x >= 4.0f || transform.position.x <= -4.0f)
+		{
+			isLeft = !isLeft;
+			anime.SetBool ("IsLeft", isLeft);
+		}
+
 		// 移動距離の設定
 		float moveX = 0.01f;
-		if (isLeft)	{moveX = -1 * moveX;}
+		if (isLeft)	moveX = - moveX;
 
 		// 現在地から移動距離分だけ進める
-		Vector3 pos = transform.position;
-		pos.x += moveX;
-		transform.position = pos;
+		transform.position = new Vector3(
+			transform.position.x + moveX,
+			transform.position.y,
+			transform.position.z
+		);
 	}
 
     // ボート行動
@@ -179,17 +187,11 @@ public class BoatController : MonoBehaviour {
             case (int)eBOAT_ACT.IDLE:
                 break;
 
-            // 左に向きを変える
-            case (int)eBOAT_ACT.CHANGE_DIRECTION_LEFT:
-                isLeft = true;
-                anime.SetBool("IsLeft", isLeft);
-                break;
-
-            // 右に向きを変える
-            case (int)eBOAT_ACT.CHANGE_DIRECTION_RIGHT:
-                isLeft = false;
-                anime.SetBool("IsLeft", isLeft);
-                break;
+			// 向きを変える
+			case (int)eBOAT_ACT.CHANGE_DIRECTION:
+				isLeft = !isLeft;
+				anime.SetBool("IsLeft", isLeft);
+				break;
 
             //// 銛を撃つ
             //case (int)eBOAT_ACT.SHOT_SPEAR:
