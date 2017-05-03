@@ -873,6 +873,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boatSpear: {fileID: 878442896}
+  StartActTime: 2
   MaxDamageTime: 0.5
   MaxAttackIntervalTime: 1.3
   MaxActIntervalTime: 3
