@@ -111,19 +111,17 @@ public class BoatController : MonoBehaviour {
         // 攻撃中なら中断
         if (isAttack) return;
 
-        // 右向きの場合、コピー元の銛と同じの座標に生成
-        float createPosX = boatSpear.gameObject.transform.position.x;
-        float createPosY = boatSpear.gameObject.transform.position.y;
+		// 左向きの場合、コピー元の銛から少し左にずらす
+		float adjustPosX = 0.0f;
+		if (isLeft) adjustPosX = -1.0f;
 
-        // 左向きの場合、コピー元の銛から少し左にずらす
-        float adjustPosX = -1.0f;
-        if (isLeft) { createPosX += adjustPosX; }
-
-        GameObject createObj = (GameObject)Instantiate(
+        // 銛の生成
+		GameObject createObj = (GameObject)Instantiate(
             boatSpear,
-            new Vector3(createPosX,
-                        createPosY,
-                        0.0f),
+				new Vector3(
+					boatSpear.gameObject.transform.position.x + adjustPosX,
+					boatSpear.gameObject.transform.position.y,
+                    0.0f),
             Quaternion.identity);
         createObj.transform.parent = this.gameObject.transform; // 生成した銛の親を生成元ボートに設定
 

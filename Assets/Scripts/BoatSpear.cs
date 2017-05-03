@@ -17,7 +17,7 @@ public class BoatSpear : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        // 銛の速度は現状、等加速度
+        // 銛の速度と進む向きを決定
 		SpearSpeed = MaxSpearSpeed + Random.Range(0.0f, 0.03f);
 		if(isLeft) SpearSpeed = - SpearSpeed;
     }
