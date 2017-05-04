@@ -18,6 +18,9 @@ public class BoatController : MonoBehaviour {
     public GameObject boatSpear;
     BoatSpear boatSpearScript;
 
+	private List<GameObject> spears = new List<GameObject>();	// 銛objを保存しておくリスト
+	private int maxSpears = 2;	// 同時に発射できる銛の最大数
+
     public float StartActTime;          // 行動を開始する時間
     public float MaxDamageTime;         // ダメージ時間の最大時間
     public float MaxAttackIntervalTime; // 攻撃間隔の最大時間
@@ -28,9 +31,9 @@ public class BoatController : MonoBehaviour {
 	float attackIntervalTime;   // 攻撃間隔の時間
 	float actIntervalTime;      // 行動間隔の時間
 	int HitPoint;
+	bool isAttack = false;
 	bool isDead = false;
 	bool isDamage = false;      // ダメージ時間中か
-	bool isAttack = false;
 	bool isLeft = false;        // 左向いてるか
 	bool isActed = false;       // 行動時間中か
 	bool isStartAct = false;    // 行動開始するか
@@ -58,6 +61,7 @@ public class BoatController : MonoBehaviour {
         // 行動開始するまでの待機処理
 		StandBy();
 
+
         // 攻撃中なら攻撃間隔時間を減らして0以下になれば
         // 次の攻撃が出来る
         if (isAttack) AttackStandByTime();
@@ -75,6 +79,10 @@ public class BoatController : MonoBehaviour {
         // ダメージ中の処理
 		// ダメージ時間中でなければ攻撃する
 		if(!Damage()) SpearAttack();
+
+		// 削除された銛をListから削除
+		DeleteSpears();
+
 	}
 
 	// 設定値取得等の初期設定
@@ -89,7 +97,9 @@ public class BoatController : MonoBehaviour {
     // ボートの槍攻撃
     void SpearAttack()
     {
-        // 攻撃中なら中断
+		// 発射可能な最大数の銛を撃っていたら攻撃しない
+		if (spears.Count >= maxSpears) return;
+		// 攻撃中なら中断
         if (isAttack) return;
 
 		// 左向きの場合、コピー元の銛から少し左にずらす
@@ -109,6 +119,9 @@ public class BoatController : MonoBehaviour {
         boatSpearScript = createObj.GetComponent<BoatSpear>();
 		boatSpearScript.ShotSpear(isLeft);
 		isAttack = true;
+
+		// 銛のオブジェクトをListに入れておく
+		spears.Add(createObj);
     }
 
 	// ダメージ中の処理
@@ -254,5 +267,15 @@ public class BoatController : MonoBehaviour {
 	private static bool RandomBool()
 	{
 		return Random.Range(0, 2) == 0;
+	}
+
+	// 削除された銛をListから削除
+	private void DeleteSpears()
+	{
+		for (int i = spears.Count - 1; i >= 0; i--) {
+			if (spears [i] == null) {
+				spears.RemoveAt (i);
+			}
+		}
 	}
 }
