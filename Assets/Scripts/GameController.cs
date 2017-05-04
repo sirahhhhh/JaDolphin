@@ -6,16 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
-    const float CREATE_TIME = 1.0f; // ボート生成時間
-    float passTime; // 生成時に使う経過時間
-    int DownBoats;  // 沈めたボート数
-
-	//援軍の船用パラメータ
-	int MaxCompanyBoats = 5;
-	int CurrentCompanyBoats = 0;
-	const float CompanyBoatsCreateTime = 10.0f; // ボート生成時間
-	float CompanyBoatsPassTime; // 生成時に使う経過時間
-
     // ボート生成時の最大、最小座標
     public float createMinX, createMaxX;
     public float createMinY, createMaxY;
@@ -23,8 +13,7 @@ public class GameController : MonoBehaviour {
     public GameObject itemHeart;    // ハートアイテムObj
     public GameObject explosion;    // 爆発エフェクトObj
 
-	private List<GameObject> japBoats = new List<GameObject>();	// ボートobjを保存しておくリスト
-	private int maxJapBoats = 10;	// 漁船の最大数
+	private FishingBoat fishingBoat; // 漁船関係をまとめるクラス
 
     public Text ScoreLabel;         // スコア
 	public Text GameOverLabel;      // ゲームオーバーテキスト
@@ -39,8 +28,19 @@ public class GameController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        passTime = Time.time;       // 経過時間に現在の時間を設定
-        japBoat.SetActive(false);   // コピー元Objをdeactive
+		// 漁船関係をまとめたオブジェクトを作成
+		fishingBoat = new FishingBoat ();
+		fishingBoat.Start (
+			createMinX,
+			createMaxX,
+			createMinY,
+			createMaxY,
+			japBoat
+		);
+
+
+
+       japBoat.SetActive(false);   // コピー元Objをdeactive
 
 		// ゲームオーバー用にイルカの生存フラグをみる
         GameObject dolpObj = GameObject.FindWithTag("Player");
@@ -54,16 +54,11 @@ public class GameController : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-
-        // ボート生成
-        CreateBoat();
-		//CreateCompanyBoat();
-
-		// 沈められたボートListの削除
-		DeleteJapBoats();
+		// 漁船関係の動作
+		fishingBoat.Run ();
 
 		// スコア表示
-        ScoreLabel.text = "しずめた数 : " + DownBoats;
+ 		ScoreLabel.text = "しずめた数 : " + fishingBoat.GetDownBoat();
 
         // HP表示
         hpPanelScript.UpdateHPPanel(dolphinCtrl.GetHP());
@@ -77,51 +72,7 @@ public class GameController : MonoBehaviour {
         }
 	}
 
-    // ボート生成
-    void CreateBoat()
-    {
-		// 漁船数が最大値ならそれ以上作成しない
-		if (japBoats.Count >= maxJapBoats) return;
-		
-        // 生成時間を過ぎたらつくる
-        float nowTime = Time.time;
-        if ((Time.time - passTime) < CREATE_TIME) return;
-        passTime = nowTime;
 
-        // 座標はランダムで決定
-        float createX = Random.Range(createMinX, createMaxX);
-        float createY = Random.Range(createMinY, createMaxY);
-
-		GameObject Obj = (GameObject)Instantiate(
-            japBoat,
-            new Vector3(createX, createY, 0.0f),
-            Quaternion.identity);
-		Obj.SetActive(true);
-		japBoats.Add (Obj);
-
-    }
-
-	// 援軍のボート生成
-	void CreateCompanyBoat()
-	{
-		// 生成できる上限なら抜ける
-		if (CurrentCompanyBoats >= MaxCompanyBoats) return;
-
-		// 生成時間を過ぎたらつくる
-		if ((Time.time - CompanyBoatsPassTime) < CompanyBoatsCreateTime) return;
-		CompanyBoatsPassTime = Time.time;
-
-		// 座標はランダムで決定
-		//float createX = Random.Range(createMinX, createMaxX);
-		//float createY = Random.Range(createMinY, createMaxY);
-		/*
-		GameObject Obj = (GameObject)Instantiate(
-			CompanyBoat,
-			new Vector3(createX, createY, 0.0f),
-			Quaternion.identity);
-		Obj.SetActive(true);
-		*/
-	}
 
     // ゲームオーバー処理
     void GameOver()
@@ -139,8 +90,7 @@ public class GameController : MonoBehaviour {
     // 現状、沈めたボート数を加算する
     public void DownBoat()
     {
-        DownBoats++;
-        Debug.Log("downs : " + DownBoats);
+		fishingBoat.AddDownBoat ();
     }
 
     // リトライボタン押下時
@@ -187,14 +137,87 @@ public class GameController : MonoBehaviour {
         expEffScript.StartAnime();
     }
 
-	// 削除されたボートをListから削除
-	public void DeleteJapBoats()
+	// 漁船関係をまとめたクラス
+	private class FishingBoat
 	{
-		for (int i = japBoats.Count -1; i >= 0; i--) {
-			if (japBoats[i] == null) {
-				japBoats.RemoveAt (i);
+		private const float CREATE_TIME = 1.0f; // ボート生成時間
+		private float passTime; // 生成時に使う経過時間
+		private int DownBoats;  // 沈めたボート数
+
+		// ボート生成時の最大、最小座標
+		private float createMinX, createMaxX;
+		private float createMinY, createMaxY;
+		private GameObject japBoat;      // ボートObj
+
+		private int maxJapBoats = 10;	// 漁船の最大数
+		private List<GameObject> lists = new List<GameObject>();	// ボートobjを保存しておくリスト
+
+		public void Start(float minX, float maxX, float minY, float maxY, GameObject boat)
+		{
+			createMinX = minX;
+			createMaxX = maxX;
+			createMinY = minY;
+			createMaxY = maxY;
+			japBoat = boat;
+
+			passTime = Time.time;       // 経過時間に現在の時間を設定
+		}
+
+		// 削除されたボートをListから削除
+		private void DeleteBoats()
+		{
+			for (int i = this.lists.Count -1; i >= 0; i--) {
+				if (this.lists[i] == null) {
+					this.lists.RemoveAt (i);
+				}
 			}
+
+		}
+
+		// ボート生成
+		private void CreateBoat()
+		{
+			// 漁船数が最大値ならそれ以上作成しない
+			if (this.lists.Count >= this.maxJapBoats) return;
+
+			// 生成時間を過ぎたらつくる
+			float nowTime = Time.time;
+			if ((Time.time - passTime) < CREATE_TIME) return;
+			passTime = nowTime;
+
+			// 座標はランダムで決定
+			float createX = Random.Range(createMinX, createMaxX);
+			float createY = Random.Range(createMinY, createMaxY);
+
+			GameObject Obj = (GameObject)Instantiate(
+				japBoat,
+				new Vector3(createX, createY, 0.0f),
+				Quaternion.identity);
+			Obj.SetActive(true);
+			this.lists.Add (Obj);
+		}
+
+		public void Run()
+		{
+			// ボート生成
+			this.CreateBoat();
+
+			// 沈められたボートListの削除
+			this.DeleteBoats ();
+		}
+
+		// 沈めたボートの数をカウント
+		public void AddDownBoat()
+		{
+			DownBoats++;
+			//Debug.Log("downs : " + DownBoats);
+		}
+
+		// 沈めたボートの数を返す
+		public int GetDownBoat()
+		{
+			return DownBoats;
+
 		}
 	}
-
 }
