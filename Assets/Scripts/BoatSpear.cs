@@ -27,22 +27,16 @@ public class BoatSpear : MonoBehaviour {
         if (!isAlive) return;
 
         // 銛移動処理
-        float posX = transform.position.x;
-        float posY = transform.position.y;
+		transform.position = new Vector3(
+			transform.position.x + SpearSpeed,
+			transform.position.y,
+			0.0f);
 
-		posX += SpearSpeed;
-
+		// 銛の生存時間を減算
         SpearAliveTime -= Time.deltaTime;
-        if(SpearAliveTime <= 0.0f)
-        {
-            // 銛削除
-            isAlive = false;
-            SpearAliveTime = 0.0f;
-            //this.gameObject.SetActive(false);
-            Destroy(this.gameObject);
-        }
+		// 生存時間が終わったら銛を削除
+		if (SpearAliveTime <= 0.0f) DeleteSpear ();
 
-        transform.position = new Vector3(posX, posY, 0.0f);
     }
 
     // 銛発射
@@ -60,6 +54,15 @@ public class BoatSpear : MonoBehaviour {
 
         SpearAliveTime = MaxSpearAliveTime;
     }
+
+	// 銛の削除
+	void DeleteSpear()
+	{
+		isAlive = false;
+		SpearAliveTime = 0.0f;
+		//this.gameObject.SetActive(false);
+		Destroy(this.gameObject);
+	}
 
     // 攻撃(銛)の攻撃力取得
     public int GetAttackPower()

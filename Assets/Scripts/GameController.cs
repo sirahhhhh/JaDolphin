@@ -10,7 +10,6 @@ public class GameController : MonoBehaviour {
     int DownBoats;  // 沈めたボート数
 
 	//援軍の船用パラメータ
-	public CompanyBoat companyBoats;
 	int MaxCompanyBoats = 5;
 	int CurrentCompanyBoats = 0;
 	const float CompanyBoatsCreateTime = 10.0f; // ボート生成時間
@@ -39,7 +38,7 @@ public class GameController : MonoBehaviour {
         passTime = Time.time;       // 経過時間に現在の時間を設定
         japBoat.SetActive(false);   // コピー元Objをdeactive
 
-        // ゲームオーバー用にイルカの生存フラグをみる
+		// ゲームオーバー用にイルカの生存フラグをみる
         GameObject dolpObj = GameObject.FindWithTag("Player");
         dolphinCtrl = dolpObj.GetComponent<DolphinController>();
 
