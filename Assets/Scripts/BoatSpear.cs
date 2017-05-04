@@ -70,4 +70,8 @@ public class BoatSpear : MonoBehaviour {
         return AttackPower;
     }
 
+	public bool GetAlive()
+	{
+		return isAlive;
+	}
 }

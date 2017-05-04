@@ -22,6 +22,9 @@ public class GameController : MonoBehaviour {
     public GameObject itemHeart;    // ハートアイテムObj
     public GameObject explosion;    // 爆発エフェクトObj
 
+	private List<GameObject> japBoats = new List<GameObject>();	// ボートobjを保存しておくリスト
+	private int maxJapBoats = 10;	// 漁船の最大数
+
     public Text ScoreLabel;         // スコア
 	public Text GameOverLabel;      // ゲームオーバーテキスト
     public Button RetryButton;      // リトライボタン
@@ -45,15 +48,20 @@ public class GameController : MonoBehaviour {
         itemDropRatio = 1 / 5.0f;   // アイテムドロップ率設定
         IsGameOver = false;
         HasPushRetry = false;
+
     }
 
     // Update is called once per frame
     void Update () {
+
         // ボート生成
         CreateBoat();
 		CreateCompanyBoat();
 
-        // スコア表示
+		// 沈められたボートListの削除
+		DeleteJapBoats();
+
+		// スコア表示
         ScoreLabel.text = "しずめた数 : " + DownBoats;
 
         // HP表示
@@ -71,6 +79,9 @@ public class GameController : MonoBehaviour {
     // ボート生成
     void CreateBoat()
     {
+		// 漁船数が最大値ならそれ以上作成しない
+		if (japBoats.Count >= maxJapBoats) return;
+		
         // 生成時間を過ぎたらつくる
         float nowTime = Time.time;
         if ((Time.time - passTime) < CREATE_TIME) return;
@@ -80,11 +91,13 @@ public class GameController : MonoBehaviour {
         float createX = Random.Range(createMinX, createMaxX);
         float createY = Random.Range(createMinY, createMaxY);
 
-        GameObject Obj = (GameObject)Instantiate(
+		GameObject Obj = (GameObject)Instantiate(
             japBoat,
             new Vector3(createX, createY, 0.0f),
             Quaternion.identity);
-        Obj.SetActive(true);
+		Obj.SetActive(true);
+		japBoats.Add (Obj);
+
     }
 
 	// 援軍のボート生成
@@ -171,4 +184,15 @@ public class GameController : MonoBehaviour {
         // 爆発アニメ開始
         expEffScript.StartAnime();
     }
+
+	// ボートの削除
+	public void DeleteJapBoats()
+	{
+		for (int i = 0; i <= maxJapBoats; i++) {
+			if (japBoats [i] == null) {
+				japBoats.RemoveAt (i);
+			}
+		}
+	}
+
 }

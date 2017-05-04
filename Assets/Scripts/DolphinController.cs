@@ -184,6 +184,8 @@ public class DolphinController : MonoBehaviour {
             //collision.gameObject.SetActive(false);
             // ボート破棄
             Destroy(collision.gameObject);
+			// 沈められたボートListの削除
+			//gameCtrl.DeleteJapBoats();
         }
     }
 

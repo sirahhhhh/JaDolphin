@@ -255,4 +255,8 @@ public class BoatController : MonoBehaviour {
 	{
 		return Random.Range(0, 2) == 0;
 	}
+	public static int getID()
+	{
+		return 9;
+	}
 }
