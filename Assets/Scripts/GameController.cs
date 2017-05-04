@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
@@ -56,7 +57,7 @@ public class GameController : MonoBehaviour {
 
         // ボート生成
         CreateBoat();
-		CreateCompanyBoat();
+		//CreateCompanyBoat();
 
 		// 沈められたボートListの削除
 		DeleteJapBoats();
@@ -111,8 +112,8 @@ public class GameController : MonoBehaviour {
 		CompanyBoatsPassTime = Time.time;
 
 		// 座標はランダムで決定
-		float createX = Random.Range(createMinX, createMaxX);
-		float createY = Random.Range(createMinY, createMaxY);
+		//float createX = Random.Range(createMinX, createMaxX);
+		//float createY = Random.Range(createMinY, createMaxY);
 		/*
 		GameObject Obj = (GameObject)Instantiate(
 			CompanyBoat,
@@ -148,7 +149,8 @@ public class GameController : MonoBehaviour {
         Time.timeScale = 1.0f;
         IsGameOver = false;
         HasPushRetry = true;
-        Application.LoadLevel("DolphinJapan");
+        //Application.LoadLevel("DolphinJapan");	// 非推奨らしい
+		SceneManager.LoadScene("DolphinJapan");		// 今後はこっちで
     }
 
     // アイテムドロップ
@@ -188,8 +190,8 @@ public class GameController : MonoBehaviour {
 	// 削除されたボートをListから削除
 	public void DeleteJapBoats()
 	{
-		for (int i = 0; i <= maxJapBoats; i++) {
-			if (japBoats [i] == null) {
+		for (int i = japBoats.Count -1; i >= 0; i--) {
+			if (japBoats[i] == null) {
 				japBoats.RemoveAt (i);
 			}
 		}

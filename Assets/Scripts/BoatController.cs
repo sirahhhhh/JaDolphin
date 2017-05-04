@@ -19,7 +19,7 @@ public class BoatController : MonoBehaviour {
     BoatSpear boatSpearScript;
 
 	private List<GameObject> spears = new List<GameObject>();	// 銛objを保存しておくリスト
-	private int maxSpears = 1;	// 同時に発射できる銛の最大数
+	private int maxSpears = 2;	// 同時に発射できる銛の最大数
 
     public float StartActTime;          // 行動を開始する時間
     public float MaxDamageTime;         // ダメージ時間の最大時間
@@ -31,7 +31,7 @@ public class BoatController : MonoBehaviour {
 	float attackIntervalTime;   // 攻撃間隔の時間
 	float actIntervalTime;      // 行動間隔の時間
 	int HitPoint;
-	//bool isAttack = false;
+	bool isAttack = false;
 	bool isDead = false;
 	bool isDamage = false;      // ダメージ時間中か
 	bool isLeft = false;        // 左向いてるか
@@ -64,7 +64,7 @@ public class BoatController : MonoBehaviour {
 
         // 攻撃中なら攻撃間隔時間を減らして0以下になれば
         // 次の攻撃が出来る
-        //if (isAttack) AttackStandByTime();
+        if (isAttack) AttackStandByTime();
 
         // 行動開始しているなら
         if (isStartAct)
@@ -100,7 +100,7 @@ public class BoatController : MonoBehaviour {
 		// 発射可能な最大数の銛を撃っていたら攻撃しない
 		if (spears.Count >= maxSpears) return;
 		// 攻撃中なら中断
-        //if (isAttack) return;
+        if (isAttack) return;
 
 		// 左向きの場合、コピー元の銛から少し左にずらす
 		float adjustPosX = 0.0f;
@@ -118,7 +118,7 @@ public class BoatController : MonoBehaviour {
 
         boatSpearScript = createObj.GetComponent<BoatSpear>();
 		boatSpearScript.ShotSpear(isLeft);
-		//isAttack = true;
+		isAttack = true;
 
 		// 銛のオブジェクトをListに入れておく
 		spears.Add(createObj);
@@ -220,7 +220,7 @@ public class BoatController : MonoBehaviour {
 		if (attackIntervalTime <= 0.0f)
 		{
 			attackIntervalTime = MaxAttackIntervalTime;
-			//isAttack = false;
+			isAttack = false;
 		}
 	}
 
@@ -272,7 +272,7 @@ public class BoatController : MonoBehaviour {
 	// 削除された銛をListから削除
 	private void DeleteSpears()
 	{
-		for (int i = 0; i <= maxSpears; i++) {
+		for (int i = spears.Count - 1; i >= 0; i--) {
 			if (spears [i] == null) {
 				spears.RemoveAt (i);
 			}
