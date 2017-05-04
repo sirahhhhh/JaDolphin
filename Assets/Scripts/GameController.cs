@@ -185,7 +185,7 @@ public class GameController : MonoBehaviour {
         expEffScript.StartAnime();
     }
 
-	// ボートの削除
+	// 削除されたボートをListから削除
 	public void DeleteJapBoats()
 	{
 		for (int i = 0; i <= maxJapBoats; i++) {
