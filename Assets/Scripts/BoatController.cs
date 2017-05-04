@@ -24,16 +24,16 @@ public class BoatController : MonoBehaviour {
     public float MaxActIntervalTime;    // 行動間隔の最大時間
     public int MaxHP;
 
-    float DamageTime;           // ダメージ時間
-    float attackIntervalTime;   // 攻撃間隔の時間
-    float actIntervalTime;      // 行動間隔の時間
-    int HitPoint;
-    bool isDead;
-    bool isDamage;      // ダメージ時間中か
-    bool isAttack;
-    bool isLeft;        // 左向いてるか
-    bool isActed;       // 行動時間中か
-    bool isStartAct;    // 行動開始するか
+	float DamageTime;           // ダメージ時間
+	float attackIntervalTime;   // 攻撃間隔の時間
+	float actIntervalTime;      // 行動間隔の時間
+	int HitPoint;
+	bool isDead = false;
+	bool isDamage = false;      // ダメージ時間中か
+	bool isAttack = false;
+	bool isLeft = false;        // 左向いてるか
+	bool isActed = false;       // 行動時間中か
+	bool isStartAct = false;    // 行動開始するか
 
     Animator anime;
 
@@ -42,90 +42,49 @@ public class BoatController : MonoBehaviour {
         // コピー用銛をDeactiveに
         boatSpear.SetActive(false);
 
-        DamageTime  = MaxDamageTime;
-        HitPoint    = MaxHP;
-        attackIntervalTime = MaxAttackIntervalTime;
-        actIntervalTime = MaxActIntervalTime;
+		// 設定値取得等の初期設定
+		InitSetting();
 
-        isDead      = false;
-        isDamage    = false;
-        isAttack    = false;
-        isActed     = false;
-        isStartAct = false;
-
-        // 左右をランダムで決める
-        int ran = Random.Range(0, 1);
-        if(ran == 0)    isLeft = false;
-        else            isLeft = true;
-
+		// ボートのアニメーション開始
         anime = GetComponent<Animator>();
+
+		// ボートの向きをランダムに決める
+		isLeft = RandomBool();
+		anime.SetBool("IsLeft", isLeft);
     }
 	
 	// Update is called once per frame
 	void Update () {
         // 行動開始するまでの待機処理
-        if (!isStartAct)
-        {
-            StartActTime -= Time.deltaTime;
-            if (StartActTime <= 0.0f)
-            {
-                // 行動開始
-                isStartAct = true;
-            }
-        }
+		StandBy();
 
         // 攻撃中なら攻撃間隔時間を減らして0以下になれば
         // 次の攻撃が出来る
-        if (isAttack)
-        {
-            attackIntervalTime -= Time.deltaTime;
-            if (attackIntervalTime <= 0.0f)
-            {
-                attackIntervalTime = MaxAttackIntervalTime;
-                isAttack = false;
-            }
-        }
+        if (isAttack) AttackStandByTime();
 
         // 行動開始しているなら
         if (isStartAct)
         {
             // 行動後時間中待機処理
-            if (isActed)
-            {
-                actIntervalTime -= Time.deltaTime;
-                if (actIntervalTime <= 0.0f)
-                {
-                    actIntervalTime = MaxActIntervalTime;
-                    isActed = false;
-                }
-            }
-            else
-            {
-                // 行動後時間中でなければ行動
-                Act();
-            }
+            if (isActed) AttackStandByTime();
+            else Act();	// 行動後時間中でなければ行動
         }
 		// 船を移動させる
 		Move ();
 
-        // ダメージ時間減衰
-        // ダメージ受けて一定時間は次のダメージを受けない
-        if (isDamage)
-        {
-            DamageTime -= Time.deltaTime;
-            if (DamageTime <= 0.0f)
-            {
-                DamageTime = 0.0f;
-                isDamage = false;
-                anime.SetBool("IsDamage", isDamage);    // ダメージ中アニメに切り替え
-            }
-        }
-        else
-        {
-            // ダメージ時間中でなければ攻撃する
-            SpearAttack();
-        }
-    }
+        // ダメージ中の処理
+		// ダメージ時間中でなければ攻撃する
+		if(!Damage()) SpearAttack();
+	}
+
+	// 設定値取得等の初期設定
+	void InitSetting()
+	{
+		DamageTime  = MaxDamageTime;
+		HitPoint    = MaxHP;
+		attackIntervalTime = MaxAttackIntervalTime;
+		actIntervalTime = MaxActIntervalTime;
+	}
 
     // ボートの槍攻撃
     void SpearAttack()
@@ -152,15 +111,30 @@ public class BoatController : MonoBehaviour {
 		isAttack = true;
     }
 
+	// ダメージ中の処理
+	bool Damage()
+	{
+		// ダメージ時間減衰
+		// ダメージ受けて一定時間は次のダメージを受けない
+		if (isDamage)
+		{
+			DamageTime -= Time.deltaTime;
+			if (DamageTime <= 0.0f)
+			{
+				DamageTime = 0.0f;
+				isDamage = false;
+				anime.SetBool("IsDamage", isDamage);    // ダメージ中アニメに切り替え
+			}
+			return true;
+		}
+		return false;
+	}
+
 	// 船を進行方向へ移動させる
 	void Move()
 	{
 		// 画面外に出そうなら反転
-		if (transform.position.x >= 4.0f || transform.position.x <= -4.0f)
-		{
-			isLeft = !isLeft;
-			anime.SetBool ("IsLeft", isLeft);
-		}
+		if (transform.position.x >= 4.0f || transform.position.x <= -4.0f) Reverse();
 
 		// 移動距離の設定
 		float moveX = 0.01f;
@@ -189,8 +163,7 @@ public class BoatController : MonoBehaviour {
 
 			// 向きを変える
 			case (int)eBOAT_ACT.CHANGE_DIRECTION:
-				isLeft = !isLeft;
-				anime.SetBool("IsLeft", isLeft);
+				Reverse ();
 				break;
 
             //// 銛を撃つ
@@ -202,6 +175,41 @@ public class BoatController : MonoBehaviour {
         }
         isActed = true;
     }
+
+	// ボートの反転
+	void Reverse()
+	{
+		isLeft = !isLeft;
+		anime.SetBool("IsLeft", isLeft);
+	}
+
+	// スタンバイ
+	void StandBy()
+	{
+		// 行動開始するまでの待機処理
+		if (!isStartAct)
+		{
+			StartActTime -= Time.deltaTime;
+			if (StartActTime <= 0.0f)
+			{
+				// 行動開始
+				isStartAct = true;
+			}
+		}
+	}
+
+	// 攻撃スタンバイ時間の処理
+	void AttackStandByTime()
+	{
+		// 攻撃中なら攻撃間隔時間を減らして0以下になれば
+		// 次の攻撃が出来る
+		attackIntervalTime -= Time.deltaTime;
+		if (attackIntervalTime <= 0.0f)
+		{
+			attackIntervalTime = MaxAttackIntervalTime;
+			isAttack = false;
+		}
+	}
 
     // ボートダメージ処理
     // @return true     ダメージ処理できた
@@ -241,4 +249,10 @@ public class BoatController : MonoBehaviour {
     {
         return transform.position.y;
     }
+
+	// bool値の乱数を返す関数
+	private static bool RandomBool()
+	{
+		return Random.Range(0, 2) == 0;
+	}
 }
