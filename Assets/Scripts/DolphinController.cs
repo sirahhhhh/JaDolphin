@@ -39,8 +39,8 @@ public class DolphinController : MonoBehaviour {
     float DamageTime;
     int HitPoint;
     int AttackPower;
-    bool isAlive;       // 生存フラグ
-    bool isDamage;      // ダメージ時間中か
+	bool isAlive = true;       // 生存フラグ
+	bool isDamage = false;      // ダメージ時間中か
 
     void Awake()
     {
@@ -56,12 +56,10 @@ public class DolphinController : MonoBehaviour {
         // SE用コンポーネント取得
         hitSE = GetComponent<AudioSource>();
 
-        HitPoint = MaxHitPoint;
-        AttackPower = MaxAttackPower;
-        DamageTime = MaxDamageTime;
+		// 設定値取得等の初期設定
+		 InitSetting();
 
-        isAlive = true;
-        isDamage = false;
+
     }
 	
 	// Update is called once per frame
@@ -184,6 +182,9 @@ public class DolphinController : MonoBehaviour {
             //collision.gameObject.SetActive(false);
             // ボート破棄
             Destroy(collision.gameObject);
+			// 沈められたボートListの削除
+			// このタイミングだとdestroyが終わりきってない？
+			//gameCtrl.DeleteJapBoats();
         }
     }
 
@@ -235,4 +236,12 @@ public class DolphinController : MonoBehaviour {
 
         HitPoint += incHP;
     }
+	// 設定値取得等の初期設定
+	void InitSetting()
+	{
+		HitPoint = MaxHitPoint;
+		AttackPower = MaxAttackPower;
+		DamageTime = MaxDamageTime;
+	}
+
 }
