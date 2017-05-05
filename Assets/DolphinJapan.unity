@@ -1054,7 +1054,9 @@ MonoBehaviour:
   createMaxX: 4
   createMinY: -4
   createMaxY: 4
-  japBoat: {fileID: 672138582}
+  japBoats:
+  - {fileID: 672138582}
+  - {fileID: 1428060615}
   itemHeart: {fileID: 2004419466}
   explosion: {fileID: 1668947222}
   ScoreLabel: {fileID: 1025400744}
