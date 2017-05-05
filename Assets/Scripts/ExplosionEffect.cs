@@ -14,6 +14,9 @@ public class ExplosionEffect : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+		// 爆発アニメ開始
+		explosionAnim.SetTrigger("OnceAnim");
+		explosionSE.Play();
     }
 	
 	// Update is called once per frame
@@ -32,12 +35,5 @@ public class ExplosionEffect : MonoBehaviour {
 
             Destroy(this.gameObject);
         }
-    }
-
-    // 爆発アニメ開始
-    public void StartAnime()
-    {
-        explosionAnim.SetTrigger("OnceAnim");
-        explosionSE.Play();
     }
 }

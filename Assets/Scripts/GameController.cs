@@ -106,7 +106,7 @@ public class GameController : MonoBehaviour {
     }
 
     // アイテムドロップ
-    public void DropItem(float dropPosX, float dropPosY)
+    private void DropItem(float dropPosX, float dropPosY)
     {
         // 0.0～1.0からの値をランダムで取得して
         // 指定割合以下ならアイテムドロップする
@@ -123,9 +123,8 @@ public class GameController : MonoBehaviour {
 
 
     // 爆発エフェクト生成
-    public void CreateExplosionEffect(float posX, float posY)
+    private void CreateExplosionEffect(float posX, float posY)
     {
-		Debug.Log ("test");
         float adjustY = 0.1f;   // 少し下側に表示する
 
         GameObject createObj =
@@ -135,10 +134,6 @@ public class GameController : MonoBehaviour {
                 Quaternion.identity);
 
         createObj.SetActive(true);  // 有効に
-        ExplosionEffect expEffScript = createObj.GetComponent<ExplosionEffect>();
-
-        // 爆発アニメ開始
-        expEffScript.StartAnime();
     }
 
 }
