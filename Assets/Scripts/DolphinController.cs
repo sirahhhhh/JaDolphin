@@ -174,17 +174,7 @@ public class DolphinController : MonoBehaviour {
         if (BoatCtrl.IsDead())
         {
             // 船沈め
-            gameCtrl.DownBoat();
-            // 爆発エフェクト
-            gameCtrl.CreateExplosionEffect(BoatCtrl.GetPosX(), BoatCtrl.GetPosY());
-            // アイテムドロップ
-            gameCtrl.DropItem(BoatCtrl.GetPosX(), BoatCtrl.GetPosY());
-            //collision.gameObject.SetActive(false);
-            // ボート破棄
-            Destroy(collision.gameObject);
-			// 沈められたボートListの削除
-			// このタイミングだとdestroyが終わりきってない？
-			//gameCtrl.DeleteJapBoats();
+			gameCtrl.DownBoat(collision.gameObject,BoatCtrl.GetPosX(), BoatCtrl.GetPosY());
         }
     }
 
