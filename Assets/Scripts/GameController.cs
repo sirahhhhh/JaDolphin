@@ -22,14 +22,16 @@ public class GameController : MonoBehaviour {
 
     DolphinController dolphinCtrl;
 
-    float itemDropRatio;            // アイテムドロップ率
     bool IsGameOver;
     bool HasPushRetry;
 
     // Use this for initialization
     void Start () {
 		// 漁船関係をまとめたオブジェクトを作成
-		boatManager = new BoatManager ();
+		GameObject obj = new GameObject("BoatManager");
+		BoatManager bmAddComponet = obj.AddComponent<BoatManager> ();
+		boatManager = bmAddComponet;
+		//boatManager = new BoatManager ();
 		boatManager.Init (
 			createMinX,
 			createMaxX,
@@ -48,7 +50,6 @@ public class GameController : MonoBehaviour {
         GameObject dolpObj = GameObject.FindWithTag("Player");
         dolphinCtrl = dolpObj.GetComponent<DolphinController>();
 
-        itemDropRatio = 1 / 5.0f;   // アイテムドロップ率設定
         IsGameOver = false;
         HasPushRetry = false;
 
@@ -91,11 +92,7 @@ public class GameController : MonoBehaviour {
 	public void DownBoat(GameObject obj,float posX, float posY)
     {
 		// 沈めた数を加算
-		boatManager.AddDownBoat ();
-		// 爆発エフェクト
-		CreateExplosionEffect(posX,posY);
-		// アイテムドロップ
-		DropItem(posX, posY);
+		boatManager.BoatDown (explosion, itemHeart, posX, posY);
 		// ボート破棄
 		Destroy(obj);
     }
@@ -108,36 +105,4 @@ public class GameController : MonoBehaviour {
         HasPushRetry = true;
 		SceneManager.LoadScene("DolphinJapan");	
     }
-
-    // アイテムドロップ
-    private void DropItem(float dropPosX, float dropPosY)
-    {
-        // 0.0～1.0からの値をランダムで取得して
-        // 指定割合以下ならアイテムドロップする
-        if (Random.value > itemDropRatio) return;
-
-        // ボートが居た場所にドロップする
-        GameObject itemObj =
-            (GameObject)Instantiate(
-                itemHeart,
-                new Vector3(dropPosX, dropPosY, 0.0f),
-                Quaternion.identity);
-        itemObj.SetActive(true);
-    }
-
-
-    // 爆発エフェクト生成
-    private void CreateExplosionEffect(float posX, float posY)
-    {
-        float adjustY = 0.1f;   // 少し下側に表示する
-
-        GameObject createObj =
-            (GameObject)Instantiate(
-                explosion,
-                new Vector3(posX, posY - adjustY, 0.0f),
-                Quaternion.identity);
-
-        createObj.SetActive(true);  // 有効に
-    }
-
 }
