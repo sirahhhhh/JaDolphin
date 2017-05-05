@@ -13,7 +13,8 @@ public class SpearManager : MonoBehaviour {
     // 同時に発射できる銛の最大数
     private int[] maxSpears = {
         2,  // NORMAL
-        5,  // BIGGER
+        3,  // YELLOW
+        6,  // BIGGER
     };
 
 	// Use this for initialization

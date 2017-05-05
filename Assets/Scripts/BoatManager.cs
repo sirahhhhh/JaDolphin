@@ -5,7 +5,12 @@ using UnityEngine;
 
 // 漁船関係をまとめたクラス
 public class BoatManager : MonoBehaviour {
-    private const int CREATE_BIGGER_BOAT_RATIO = 10;    // 漁船(大)が作られる割合
+    // 作られる漁船の割合(合計が100でなくてもよい)
+    private int[] CreateBoatRatio = {
+        60,     // 普通の漁船
+        30,     // 黄漁船
+        10      // 大漁船
+    };
 	private const float CREATE_TIME = 1.0f; // ボート生成時間
 	private float passTime; // 生成時に使う経過時間
 	private int DownBoats;  // 沈めたボート数
@@ -66,9 +71,24 @@ public class BoatManager : MonoBehaviour {
     // 生成するボートのコピー元ボートのGameObjectを取得する
 	private GameObject GetCreateBoatObj()
     {
-		// 生成する漁船を抽選
-		int BoatIndex = Random.Range(1, CREATE_BIGGER_BOAT_RATIO + 1);
-		BoatIndex /= CREATE_BIGGER_BOAT_RATIO;
+        // 生成する漁船を抽選
+        int totalRatio = 0;
+        for(int i = 0; i < CreateBoatRatio.Length; i++)
+        {
+            totalRatio += CreateBoatRatio[i];
+        }
+        int BoatIndex = 0;
+        int ranVal = Random.Range(0, totalRatio + 1);
+        for (int i = 0; i < CreateBoatRatio.Length; i++)
+        {
+            ranVal -= CreateBoatRatio[i];
+            // 0以下で抽選決定
+            if(ranVal <= 0)
+            {
+                BoatIndex = i;
+                break;
+            }
+        }
 
 		return japBoats[BoatIndex];
     }

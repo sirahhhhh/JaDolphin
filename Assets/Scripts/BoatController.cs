@@ -7,6 +7,7 @@ public class BoatController : MonoBehaviour {
     public enum eBOAT_TYPE
     {
         NORMAL,         // 通常の漁船
+        YELLOW,         // 黄色漁船
         BIGGER,         // 漁船(大)
         BOAT_TYPE_MAX,
     }
@@ -41,6 +42,7 @@ public class BoatController : MonoBehaviour {
 	bool isDead = false;
 	bool isDamage = false;      // ダメージ時間中か
 	bool isLeft = false;        // 左向いてるか
+    bool isMovingUp = false;    // 上行くか
 	bool isActed = false;       // 行動時間中か
 	bool isStartAct = false;    // 行動開始するか
 
@@ -149,10 +151,18 @@ public class BoatController : MonoBehaviour {
 		float moveX = 0.01f;
 		if (isLeft)	moveX = - moveX;
 
+        // 黄漁船のみ縦移動
+        float moveY = 0.00f;
+        //if (boatType == eBOAT_TYPE.YELLOW)
+        //{
+        //    moveY = 0.01f;
+        //    if (!isMovingUp) moveY = -moveY;
+        //}
+
 		// 現在地から移動距離分だけ進める
 		transform.position = new Vector3(
 			transform.position.x + moveX,
-			transform.position.y,
+			transform.position.y + moveY,
 			transform.position.z
 		);
 	}
