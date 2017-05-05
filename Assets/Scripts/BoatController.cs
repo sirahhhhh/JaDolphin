@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BoatController : MonoBehaviour {
+    // ボートの種類
+    public enum eBOAT_TYPE
+    {
+        NORMAL,         // 通常の漁船
+        BIGGER,         // 漁船(大)
+        BOAT_TYPE_MAX,
+    }
 
     enum eBOAT_ACT
     {
@@ -24,6 +31,7 @@ public class BoatController : MonoBehaviour {
     public float MaxAttackIntervalTime; // 攻撃間隔の最大時間
     public float MaxActIntervalTime;    // 行動間隔の最大時間
     public int MaxHP;
+    public eBOAT_TYPE boatType; // 漁船の種類
 
 	float DamageTime;           // ダメージ時間
 	float attackIntervalTime;   // 攻撃間隔の時間
@@ -55,7 +63,6 @@ public class BoatController : MonoBehaviour {
 
         // ボートの向きをランダムに決める
         isLeft = RandomBool();
-        //anime.SetBool("IsLeft", isLeft);
         spRender.flipX = isLeft;
     }
 	
@@ -95,6 +102,11 @@ public class BoatController : MonoBehaviour {
 		HitPoint    = MaxHP;
 		attackIntervalTime = MaxAttackIntervalTime;
 		actIntervalTime = MaxActIntervalTime;
+
+        if(boatType == eBOAT_TYPE.BIGGER)
+        {
+            maxSpears = 5;
+        }
 	}
 
     // ボートの槍攻撃
@@ -108,9 +120,15 @@ public class BoatController : MonoBehaviour {
 		// 左向きの場合、コピー元の銛から少し左にずらす
 		float adjustPosX = 0.0f;
 		if (isLeft) adjustPosX = -1.0f;
+        if (boatType == eBOAT_TYPE.BIGGER)
+        {
+            float biggerAdjustPoxX = 0.7f;
+            if (!isLeft) adjustPosX += biggerAdjustPoxX;
+            else adjustPosX -= biggerAdjustPoxX;
+        }
 
         // 銛の生成
-		GameObject createObj = (GameObject)Instantiate(
+        GameObject createObj = (GameObject)Instantiate(
             boatSpear,
 				new Vector3(
 					boatSpear.gameObject.transform.position.x + adjustPosX,
@@ -196,7 +214,6 @@ public class BoatController : MonoBehaviour {
 	void Reverse()
 	{
 		isLeft = !isLeft;
-        //anime.SetBool("IsLeft", isLeft);
         spRender.flipX = isLeft;
     }
 

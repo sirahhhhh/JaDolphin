@@ -5,14 +5,6 @@ using UnityEngine;
 
 // 漁船関係をまとめたクラス
 public class BoatManager : MonoBehaviour {
-    // ボートの種類
-    enum eBOAT_TYPE
-    {
-        NORMAL,         // 通常のボート
-        BIGGER,         // BiggerBoat
-        BOAT_TYPE_MAX,
-    }
-
     private const int CREATE_BIGGER_BOAT_RATIO = 10;    // 漁船(大)が作られる割合
 	private const float CREATE_TIME = 1.0f; // ボート生成時間
 	private float passTime; // 生成時に使う経過時間
