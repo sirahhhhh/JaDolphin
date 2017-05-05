@@ -56,7 +56,6 @@ public class BoatManager : MonoBehaviour {
 			new Vector3(createX, createY, 0.0f),
 			Quaternion.identity
 		);
-
 		Obj.SetActive(true);
 		this.lists.Add (Obj);
 	}

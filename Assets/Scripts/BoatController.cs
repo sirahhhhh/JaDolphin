@@ -16,8 +16,8 @@ public class BoatController : MonoBehaviour {
     public GameObject boatSpear;
     BoatSpear boatSpearScript;
 
-	private List<GameObject> spears = new List<GameObject>();	// 銛objを保存しておくリスト
-	private int maxSpears = 2;	// 同時に発射できる銛の最大数
+	private SpearManager spearManager;	// 銛関係のマネージャ
+
 
     public float StartActTime;          // 行動を開始する時間
     public float MaxDamageTime;         // ダメージ時間の最大時間
@@ -57,6 +57,11 @@ public class BoatController : MonoBehaviour {
         isLeft = RandomBool();
         //anime.SetBool("IsLeft", isLeft);
         spRender.flipX = isLeft;
+
+		// 銛関係のマネージャ
+		GameObject obj = new GameObject("SpearManger");
+		SpearManager smAddComponet = obj.AddComponent<SpearManager> ();
+		spearManager = smAddComponet;
     }
 	
 	// Update is called once per frame
@@ -79,12 +84,22 @@ public class BoatController : MonoBehaviour {
 		// 船を移動させる
 		Move ();
 
+
         // ダメージ中の処理
 		// ダメージ時間中でなければ攻撃する
-		if(!Damage()) SpearAttack();
+		if (!Damage ()) {
+			isAttack = spearManager.Fire (
+				isAttack,
+				isLeft,
+				this.gameObject.transform,
+				boatSpear.gameObject.transform.position.x,
+				boatSpear.gameObject.transform.position.y,
+				boatSpear
+			);
+		}
 
 		// 削除された銛をListから削除
-		DeleteSpears();
+		spearManager.DeleteSpears();
 
 	}
 
@@ -96,36 +111,6 @@ public class BoatController : MonoBehaviour {
 		attackIntervalTime = MaxAttackIntervalTime;
 		actIntervalTime = MaxActIntervalTime;
 	}
-
-    // ボートの槍攻撃
-    void SpearAttack()
-    {
-		// 発射可能な最大数の銛を撃っていたら攻撃しない
-		if (spears.Count >= maxSpears) return;
-		// 攻撃中なら中断
-        if (isAttack) return;
-
-		// 左向きの場合、コピー元の銛から少し左にずらす
-		float adjustPosX = 0.0f;
-		if (isLeft) adjustPosX = -1.0f;
-
-        // 銛の生成
-		GameObject createObj = (GameObject)Instantiate(
-            boatSpear,
-				new Vector3(
-					boatSpear.gameObject.transform.position.x + adjustPosX,
-					boatSpear.gameObject.transform.position.y,
-                    0.0f),
-            Quaternion.identity);
-        createObj.transform.parent = this.gameObject.transform; // 生成した銛の親を生成元ボートに設定
-
-        boatSpearScript = createObj.GetComponent<BoatSpear>();
-		boatSpearScript.ShotSpear(isLeft);
-		isAttack = true;
-
-		// 銛のオブジェクトをListに入れておく
-		spears.Add(createObj);
-    }
 
 	// ダメージ中の処理
 	bool Damage()
@@ -271,15 +256,5 @@ public class BoatController : MonoBehaviour {
 	private static bool RandomBool()
 	{
 		return Random.Range(0, 2) == 0;
-	}
-
-	// 削除された銛をListから削除
-	private void DeleteSpears()
-	{
-		for (int i = spears.Count - 1; i >= 0; i--) {
-			if (spears [i] == null) {
-				spears.RemoveAt (i);
-			}
-		}
 	}
 }
