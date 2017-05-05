@@ -5,6 +5,15 @@ using UnityEngine;
 
 // 漁船関係をまとめたクラス
 public class BoatManager : MonoBehaviour {
+    // ボートの種類
+    enum eBOAT_TYPE
+    {
+        NORMAL,         // 通常のボート
+        BIGGER,         // BiggerBoat
+        BOAT_TYPE_MAX,
+    }
+
+    private const int CREATE_BIGGER_BOAT_RATIO = 10;    // 漁船(大)が作られる割合
 	private const float CREATE_TIME = 1.0f; // ボート生成時間
 	private float passTime; // 生成時に使う経過時間
 	private int DownBoats;  // 沈めたボート数
@@ -12,18 +21,18 @@ public class BoatManager : MonoBehaviour {
 	// ボート生成時の最大、最小座標
 	private float createMinX, createMaxX;
 	private float createMinY, createMaxY;
-	private GameObject japBoat;      // ボートObj
+	private GameObject[] japBoats;  // ボートObj
 
 	private int maxJapBoats = 10;	// 漁船の最大数
 	private List<GameObject> lists = new List<GameObject>();	// ボートobjを保存しておくリスト
 
-	public void Init(float minX, float maxX, float minY, float maxY, GameObject boat)
+	public void Init(float minX, float maxX, float minY, float maxY, GameObject[] boats)
 	{
 		createMinX = minX;
 		createMaxX = maxX;
 		createMinY = minY;
 		createMaxY = maxY;
-		japBoat = boat;
+		japBoats = boats;
 
 		passTime = Time.time;       // 経過時間に現在の時間を設定
 	}
@@ -52,7 +61,7 @@ public class BoatManager : MonoBehaviour {
 		float createY = Random.Range(createMinY, createMaxY);
 
 		GameObject Obj = (GameObject)Instantiate(
-			japBoat,
+            GetCreateBoatObj(),
 			new Vector3(createX, createY, 0.0f),
 			Quaternion.identity
 		);
@@ -60,6 +69,16 @@ public class BoatManager : MonoBehaviour {
 		Obj.SetActive(true);
 		this.lists.Add (Obj);
 	}
+
+    // 生成するボートのコピー元ボートのGameObjectを取得する
+    private GameObject GetCreateBoatObj()
+    {
+        // 生成する漁船を抽選
+        int BoatIndex = Random.Range(1, CREATE_BIGGER_BOAT_RATIO + 1);
+        BoatIndex /= CREATE_BIGGER_BOAT_RATIO;
+
+        return japBoats[BoatIndex];
+    }
 
 	public void Run()
 	{
