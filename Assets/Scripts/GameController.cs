@@ -125,7 +125,6 @@ public class GameController : MonoBehaviour {
     // 爆発エフェクト生成
     public void CreateExplosionEffect(float posX, float posY)
     {
-		Debug.Log ("test");
         float adjustY = 0.1f;   // 少し下側に表示する
 
         GameObject createObj =
@@ -135,10 +134,8 @@ public class GameController : MonoBehaviour {
                 Quaternion.identity);
 
         createObj.SetActive(true);  // 有効に
-        ExplosionEffect expEffScript = createObj.GetComponent<ExplosionEffect>();
+        //ExplosionEffect expEffScript = createObj.GetComponent<ExplosionEffect>();
 
-        // 爆発アニメ開始
-        expEffScript.StartAnime();
     }
 
 }
