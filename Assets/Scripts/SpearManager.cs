@@ -9,8 +9,12 @@ public class SpearManager : MonoBehaviour {
 	//public GameObject boatSpear;
 	BoatSpear boatSpearScript;
 
-	private List<GameObject> spears = new List<GameObject>();	// 銛objを保存しておくリスト
-	private int maxSpears = 2;	// 同時に発射できる銛の最大数
+	private List<GameObject> spears = new List<GameObject>();   // 銛objを保存しておくリスト
+    // 同時に発射できる銛の最大数
+    private int[] maxSpears = {
+        2,  // NORMAL
+        5,  // BIGGER
+    };
 
 	// Use this for initialization
 	void Start () {
@@ -26,7 +30,7 @@ public class SpearManager : MonoBehaviour {
 	public bool Fire(bool isAttack,bool isLeft,Transform trans,float posX,float posY,GameObject boatSpear, BoatController.eBOAT_TYPE boatType)
 	{
 		// 発射可能な最大数の銛を撃っていたら攻撃しない
-		if (spears.Count >= maxSpears) return isAttack;
+		if (spears.Count >= maxSpears[(int)boatType]) return isAttack;
 		// 攻撃中なら中断
 		if (isAttack) return isAttack;
 
@@ -39,8 +43,6 @@ public class SpearManager : MonoBehaviour {
             float biggerAdjustPoxX = 0.7f;
             if (!isLeft) adjustPosX += biggerAdjustPoxX;
             else adjustPosX -= biggerAdjustPoxX;
-
-            maxSpears = 5;
         }
 
         // 銛の生成
