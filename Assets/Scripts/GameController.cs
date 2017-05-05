@@ -29,7 +29,10 @@ public class GameController : MonoBehaviour {
     // Use this for initialization
     void Start () {
 		// 漁船関係をまとめたオブジェクトを作成
-		boatManager = new BoatManager ();
+		GameObject obj = new GameObject("BoatManager");
+		BoatManager bmAddComponet = obj.AddComponent<BoatManager> ();
+		boatManager = bmAddComponet;
+		//boatManager = new BoatManager ();
 		boatManager.Init (
 			createMinX,
 			createMaxX,
