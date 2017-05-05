@@ -9,7 +9,7 @@ public class GameController : MonoBehaviour {
     // ボート生成時の最大、最小座標
     public float createMinX, createMaxX;
     public float createMinY, createMaxY;
-    public GameObject japBoat;      // ボートObj
+    public GameObject[] japBoats;   // 漁船のコピー元Obj
     public GameObject itemHeart;    // ハートアイテムObj
     public GameObject explosion;    // 爆発エフェクトObj
 
@@ -35,10 +35,14 @@ public class GameController : MonoBehaviour {
 			createMaxX,
 			createMinY,
 			createMaxY,
-			japBoat
+			japBoats
 		);
-			
-       japBoat.SetActive(false);   // コピー元Objをdeactive
+
+        // 漁船のコピー元Objをdeactive
+        for (int i = 0; i < japBoats.Length; i++)
+        {
+            japBoats[i].SetActive(false);
+        }
 
 		// ゲームオーバー用にイルカの生存フラグをみる
         GameObject dolpObj = GameObject.FindWithTag("Player");
