@@ -13,7 +13,6 @@ public class GameController : MonoBehaviour {
     public GameObject itemHeart;    // ハートアイテムObj
     public GameObject explosion;    // 爆発エフェクトObj
 
-	//private FishingBoat fishingBoat; // 漁船関係をまとめるクラス
 	private BoatManager	boatManager; // 漁船関係をまとめるクラス
 
     public Text ScoreLabel;         // スコア
@@ -31,17 +30,14 @@ public class GameController : MonoBehaviour {
     void Start () {
 		// 漁船関係をまとめたオブジェクトを作成
 		boatManager = new BoatManager ();
-//		fishingBoat = new FishingBoat ();
-		boatManager.Start (
+		boatManager.Init (
 			createMinX,
 			createMaxX,
 			createMinY,
 			createMaxY,
 			japBoat
 		);
-
-
-
+			
        japBoat.SetActive(false);   // コピー元Objをdeactive
 
 		// ゲームオーバー用にイルカの生存フラグをみる
@@ -73,9 +69,7 @@ public class GameController : MonoBehaviour {
             }
         }
 	}
-
-
-
+		
     // ゲームオーバー処理
     void GameOver()
     {
@@ -90,9 +84,16 @@ public class GameController : MonoBehaviour {
 
     // ボートが沈んだら
     // 現状、沈めたボート数を加算する
-    public void DownBoat()
+	public void DownBoat(GameObject obj,float posX, float posY)
     {
+		// 沈めた数を加算
 		boatManager.AddDownBoat ();
+		// 爆発エフェクト
+		CreateExplosionEffect(posX,posY);
+		// アイテムドロップ
+		DropItem(posX, posY);
+		// ボート破棄
+		Destroy(obj);
     }
 
     // リトライボタン押下時
@@ -101,8 +102,7 @@ public class GameController : MonoBehaviour {
         Time.timeScale = 1.0f;
         IsGameOver = false;
         HasPushRetry = true;
-        //Application.LoadLevel("DolphinJapan");	// 非推奨らしい
-		SceneManager.LoadScene("DolphinJapan");		// 今後はこっちで
+		SceneManager.LoadScene("DolphinJapan");	
     }
 
     // アイテムドロップ
@@ -121,9 +121,11 @@ public class GameController : MonoBehaviour {
         itemObj.SetActive(true);
     }
 
+
     // 爆発エフェクト生成
     public void CreateExplosionEffect(float posX, float posY)
     {
+		Debug.Log ("test");
         float adjustY = 0.1f;   // 少し下側に表示する
 
         GameObject createObj =
@@ -138,4 +140,5 @@ public class GameController : MonoBehaviour {
         // 爆発アニメ開始
         expEffScript.StartAnime();
     }
+
 }
