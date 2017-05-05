@@ -92,7 +92,7 @@ public class GameController : MonoBehaviour {
 	public void DownBoat(GameObject obj,float posX, float posY)
     {
 		// 沈めた数を加算
-		boatManager.BoatDown (explosion, itemHeart, posX, posY);
+		boatManager.BoatDown (explosion, itemHeart, posX, posY, obj.GetComponent<BoatController>().boatType);
 		// ボート破棄
 		Destroy(obj);
     }

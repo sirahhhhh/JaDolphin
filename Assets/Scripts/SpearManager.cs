@@ -9,8 +9,12 @@ public class SpearManager : MonoBehaviour {
 	//public GameObject boatSpear;
 	BoatSpear boatSpearScript;
 
-	private List<GameObject> spears = new List<GameObject>();	// 銛objを保存しておくリスト
-	private int maxSpears = 2;	// 同時に発射できる銛の最大数
+	private List<GameObject> spears = new List<GameObject>();   // 銛objを保存しておくリスト
+    // 同時に発射できる銛の最大数
+    private int[] maxSpears = {
+        2,  // NORMAL
+        5,  // BIGGER
+    };
 
 	// Use this for initialization
 	void Start () {
@@ -23,19 +27,26 @@ public class SpearManager : MonoBehaviour {
 	}
 
 	// ボートの槍攻撃
-	public bool Fire(bool isAttack,bool isLeft,Transform trans,float posX,float posY,GameObject boatSpear)
+	public bool Fire(bool isAttack,bool isLeft,Transform trans,float posX,float posY,GameObject boatSpear, BoatController.eBOAT_TYPE boatType)
 	{
 		// 発射可能な最大数の銛を撃っていたら攻撃しない
-		if (spears.Count >= maxSpears) return isAttack;
+		if (spears.Count >= maxSpears[(int)boatType]) return isAttack;
 		// 攻撃中なら中断
 		if (isAttack) return isAttack;
 
 		// 左向きの場合、コピー元の銛から少し左にずらす
 		float adjustPosX = 0.0f;
 		if (isLeft) adjustPosX = -1.0f;
+        // 漁船(大)の銛位置調整
+        if (boatType == BoatController.eBOAT_TYPE.BIGGER)
+        {
+            float biggerAdjustPoxX = 0.7f;
+            if (!isLeft) adjustPosX += biggerAdjustPoxX;
+            else adjustPosX -= biggerAdjustPoxX;
+        }
 
-		// 銛の生成
-		GameObject createObj = (GameObject)Instantiate(
+        // 銛の生成
+        GameObject createObj = (GameObject)Instantiate(
 			boatSpear,
 			new Vector3(
 				posX + adjustPosX,
@@ -52,7 +63,7 @@ public class SpearManager : MonoBehaviour {
 		// 銛のオブジェクトをListに入れておく
 		spears.Add(createObj);
 
-	return isAttack;
+	    return isAttack;
 	}
 
 	// 削除された銛をListから削除

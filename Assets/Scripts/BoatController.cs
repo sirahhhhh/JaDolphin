@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BoatController : MonoBehaviour {
+    // ボートの種類
+    public enum eBOAT_TYPE
+    {
+        NORMAL,         // 通常の漁船
+        BIGGER,         // 漁船(大)
+        BOAT_TYPE_MAX,
+    }
 
     enum eBOAT_ACT
     {
@@ -24,6 +31,7 @@ public class BoatController : MonoBehaviour {
     public float MaxAttackIntervalTime; // 攻撃間隔の最大時間
     public float MaxActIntervalTime;    // 行動間隔の最大時間
     public int MaxHP;
+    public eBOAT_TYPE boatType; // 漁船の種類
 
 	float DamageTime;           // ダメージ時間
 	float attackIntervalTime;   // 攻撃間隔の時間
@@ -55,7 +63,6 @@ public class BoatController : MonoBehaviour {
 
         // ボートの向きをランダムに決める
         isLeft = RandomBool();
-        //anime.SetBool("IsLeft", isLeft);
         spRender.flipX = isLeft;
 
 		// 銛関係のマネージャ
@@ -94,8 +101,9 @@ public class BoatController : MonoBehaviour {
 				this.gameObject.transform,
 				boatSpear.gameObject.transform.position.x,
 				boatSpear.gameObject.transform.position.y,
-				boatSpear
-			);
+				boatSpear,
+                boatType
+            );
 		}
 
 		// 削除された銛をListから削除
@@ -181,7 +189,6 @@ public class BoatController : MonoBehaviour {
 	void Reverse()
 	{
 		isLeft = !isLeft;
-        //anime.SetBool("IsLeft", isLeft);
         spRender.flipX = isLeft;
     }
 

@@ -5,14 +5,6 @@ using UnityEngine;
 
 // 漁船関係をまとめたクラス
 public class BoatManager : MonoBehaviour {
-    // ボートの種類
-    enum eBOAT_TYPE
-    {
-        NORMAL,         // 通常のボート
-        BIGGER,         // BiggerBoat
-        BOAT_TYPE_MAX,
-    }
-
     private const int CREATE_BIGGER_BOAT_RATIO = 10;    // 漁船(大)が作られる割合
 	private const float CREATE_TIME = 1.0f; // ボート生成時間
 	private float passTime; // 生成時に使う経過時間
@@ -91,7 +83,7 @@ public class BoatManager : MonoBehaviour {
 	}
 
 	// ボートが沈められた時の処理
-	public void BoatDown(GameObject explosion, GameObject itemHeart,float posX, float posY)
+	public void BoatDown(GameObject explosion, GameObject itemHeart,float posX, float posY, BoatController.eBOAT_TYPE boatType)
 	{
 		// 沈めたボートの数をカウント
 		DownBoats++;
@@ -99,7 +91,7 @@ public class BoatManager : MonoBehaviour {
 		// 爆発エフェクト
 		CreateExplosionEffect(explosion, posX,posY);
 		// アイテムドロップ
-		DropItem (itemHeart, posX, posY);
+		DropItem (itemHeart, posX, posY, boatType);
 	}
 
 	// 沈めたボートの数を返す
@@ -119,19 +111,31 @@ public class BoatManager : MonoBehaviour {
 	}
 
 	// アイテムドロップ
-	private void DropItem(GameObject itemHeart,float dropPosX, float dropPosY)
+	private void DropItem(GameObject itemHeart,float dropPosX, float dropPosY, BoatController.eBOAT_TYPE boatType)
 	{
-		// 0.0～1.0からの値をランダムで取得して
-		// 指定割合以下ならアイテムドロップする
-		if (Random.value > itemDropRatio) return;
+        // 漁船の種類が大でなければアイテムドロップ抽選
+        if (boatType != BoatController.eBOAT_TYPE.BIGGER)
+        {
+            // 0.0～1.0からの値をランダムで取得して
+            // 指定割合以下ならアイテムドロップする
+            if (Random.value > itemDropRatio) return;
+        }
 
-		// ボートが居た場所にドロップする
-		GameObject itemObj =
-			(GameObject)Instantiate(
-				itemHeart,
-				new Vector3(dropPosX, dropPosY, 0.0f),
-				Quaternion.identity);
-		itemObj.SetActive(true);
+        int itemDropNums = 1;   // アイテムドロップの数
+        float adjustPosX = 0.5f;
+
+        // 漁船(大)ならアイテムを複数ドロップ
+        if (boatType == BoatController.eBOAT_TYPE.BIGGER) itemDropNums = 3;
+        for (int i = 0; i < itemDropNums; i++)
+        {
+            // ボートが居た場所にドロップする
+            GameObject itemObj =
+                (GameObject)Instantiate(
+                    itemHeart,
+                    new Vector3(dropPosX + (adjustPosX * i), dropPosY, 0.0f),
+                    Quaternion.identity);
+            itemObj.SetActive(true);
+        }
 	}
 
 	// 爆発エフェクト生成
