@@ -8,8 +8,6 @@ public class BoatController : MonoBehaviour {
     {
         IDLE,                      // なにもしない
 		CHANGE_DIRECTION,			// 向きを変える
-//        CHANGE_DIRECTION_LEFT,     // 左を向く
-//        CHANGE_DIRECTION_RIGHT,    // 右を向く
 //        SHOT_SPEAR,                // 銛を撃つ
         MAX_ACT,
     }
@@ -39,6 +37,7 @@ public class BoatController : MonoBehaviour {
 	bool isStartAct = false;    // 行動開始するか
 
     Animator anime;
+    SpriteRenderer spRender;
 
 	// Use this for initialization
 	void Start () {
@@ -50,10 +49,14 @@ public class BoatController : MonoBehaviour {
 
 		// ボートのアニメーション開始
         anime = GetComponent<Animator>();
+        // スプライトレンダラ取得
+        // 画像の左右反転に使用する
+        spRender = GetComponent<SpriteRenderer>();
 
-		// ボートの向きをランダムに決める
-		isLeft = RandomBool();
-		anime.SetBool("IsLeft", isLeft);
+        // ボートの向きをランダムに決める
+        isLeft = RandomBool();
+        //anime.SetBool("IsLeft", isLeft);
+        spRender.flipX = isLeft;
     }
 	
 	// Update is called once per frame
@@ -193,8 +196,9 @@ public class BoatController : MonoBehaviour {
 	void Reverse()
 	{
 		isLeft = !isLeft;
-		anime.SetBool("IsLeft", isLeft);
-	}
+        //anime.SetBool("IsLeft", isLeft);
+        spRender.flipX = isLeft;
+    }
 
 	// スタンバイ
 	void StandBy()
