@@ -77,7 +77,7 @@ public class BoatController : MonoBehaviour {
         spRender.flipX = isLeft;
 
 		// 漁師の向きをボートの向きに合わせる
-		FisherMan fisherMan =		this.GetComponentInChildren<FisherMan> ();
+		FisherMan fisherMan =	this.GetComponentInChildren<FisherMan> ();
 		fmRender = 	fisherMan.GetComponent<SpriteRenderer> ();
 		fmRender.flipX = isLeft;
 

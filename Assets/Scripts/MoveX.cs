@@ -76,4 +76,9 @@ public class MoveX : MonoBehaviour {
 		isLeft = !isLeft;
 		spRender.flipX = isLeft;
 	}
+
+	public bool GetIsLeft()
+	{
+		return isLeft;
+	}
 }

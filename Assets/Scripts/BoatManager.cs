@@ -15,6 +15,8 @@ public class BoatManager : MonoBehaviour {
 	private float passTime; // 生成時に使う経過時間
 	private int DownBoats;  // 沈めたボート数
 
+	private GeneralFunc generalFunc;
+
 	// ボート生成時の最大、最小座標
 	private float createMinX, createMaxX;
 	private float createMinY, createMaxY;
@@ -60,38 +62,13 @@ public class BoatManager : MonoBehaviour {
 		float createY = Random.Range(createMinY, createMaxY);
 
 		GameObject Obj = (GameObject)Instantiate(
-			GetCreateBoatObj(),
+			japBoats[generalFunc.SelectInt(CreateBoatRatio)],
 			new Vector3(createX, createY, 0.0f),
 			Quaternion.identity
 		);
 		Obj.SetActive(true);
 		this.lists.Add (Obj);
 	}
-
-    // 生成するボートのコピー元ボートのGameObjectを取得する
-	private GameObject GetCreateBoatObj()
-    {
-        // 生成する漁船を抽選
-        int totalRatio = 0;
-        for(int i = 0; i < CreateBoatRatio.Length; i++)
-        {
-            totalRatio += CreateBoatRatio[i];
-        }
-        int BoatIndex = 0;
-        int ranVal = Random.Range(0, totalRatio + 1);
-        for (int i = 0; i < CreateBoatRatio.Length; i++)
-        {
-            ranVal -= CreateBoatRatio[i];
-            // 0以下で抽選決定
-            if(ranVal <= 0)
-            {
-                BoatIndex = i;
-                break;
-            }
-        }
-
-		return japBoats[BoatIndex];
-    }
 
 	public void Run()
 	{
@@ -122,6 +99,7 @@ public class BoatManager : MonoBehaviour {
 		
 	// Use this for initialization
 	void Start () {
+		generalFunc = new GeneralFunc ();
 		itemDropRatio = 1 / 5.0f;   // アイテムドロップ率設定
 	}
 
