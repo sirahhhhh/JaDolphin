@@ -81,4 +81,10 @@ public class BoatSpear : MonoBehaviour {
 	{
 		return isAlive;
 	}
+
+	// 他のクラスからの
+	public bool GetIsLeft()
+	{
+		return isLeft;
+	}
 }

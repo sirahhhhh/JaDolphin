@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SpearManager : MonoBehaviour {
-	private MoveX moveX;
-	private bool isLeft;
-
 	// 銛発射のためのObj
 	//public GameObject boatSpear;
 	BoatSpear boatSpearScript;
@@ -20,9 +17,7 @@ public class SpearManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		// 左右の向きを親クラスから取得
-		moveX = this.GetComponentInParent<MoveX>();
-		isLeft = moveX.GetIsLeft ();
+
 	}
 	
 	// Update is called once per frame
@@ -31,7 +26,7 @@ public class SpearManager : MonoBehaviour {
 	}
 
 	// ボートの槍攻撃
-	public bool Fire(bool isAttack,Transform trans,float posX,float posY,GameObject boatSpear, BoatController.eBOAT_TYPE boatType)
+	public bool Fire(bool isAttack,bool isLeft, Transform trans,float posX,float posY,GameObject boatSpear, BoatController.eBOAT_TYPE boatType)
 	{
 		// 発射可能な最大数の銛を撃っていたら攻撃しない
 		if (spears.Count >= maxSpears[(int)boatType]) return isAttack;
@@ -44,7 +39,7 @@ public class SpearManager : MonoBehaviour {
         // 漁船(大)の銛位置調整
         if (boatType == BoatController.eBOAT_TYPE.BIGGER)
         {
-            float biggerAdjustPoxX = 0.7f;
+			float biggerAdjustPoxX = 0.7f;
             if (!isLeft) adjustPosX += biggerAdjustPoxX;
             else adjustPosX -= biggerAdjustPoxX;
         }

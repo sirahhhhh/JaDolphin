@@ -20,6 +20,8 @@ public class BoatController : MonoBehaviour {
     }
 
 	private GeneralFunc generalFunc;
+	private MoveX moveX;
+	private bool isLeft;
 
     // 銛発射のためのObj
     public GameObject boatSpear;
@@ -53,6 +55,10 @@ public class BoatController : MonoBehaviour {
 		// 他のクラスでも使う関数を切り出した
 		generalFunc = new GeneralFunc ();
 
+		// 左右の向きを親クラスから取得
+		moveX = this.GetComponentInParent<MoveX>();
+		isLeft = moveX.GetIsLeft ();
+
         // コピー用銛をDeactiveに
         boatSpear.SetActive(false);
 
@@ -73,6 +79,7 @@ public class BoatController : MonoBehaviour {
         // 行動開始するまでの待機処理
 		StandBy();
 
+		isLeft = moveX.GetIsLeft ();
 
         // 攻撃中なら攻撃間隔時間を減らして0以下になれば
         // 次の攻撃が出来る
@@ -91,6 +98,7 @@ public class BoatController : MonoBehaviour {
 		if (!Damage ()) {
 			isAttack = spearManager.Fire (
 				isAttack,
+				isLeft,
 				this.gameObject.transform,
 				boatSpear.gameObject.transform.position.x,
 				boatSpear.gameObject.transform.position.y,

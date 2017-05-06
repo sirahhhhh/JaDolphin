@@ -77,6 +77,7 @@ public class MoveX : MonoBehaviour {
 		spRender.flipX = isLeft;
 	}
 
+	// 他のクラスからの
 	public bool GetIsLeft()
 	{
 		return isLeft;
