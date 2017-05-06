@@ -15,7 +15,6 @@ public class BoatController : MonoBehaviour {
     enum eBOAT_ACT
     {
         IDLE,                      // なにもしない
-		CHANGE_DIRECTION,			// 向きを変える
 //        SHOT_SPEAR,                // 銛を撃つ
         MAX_ACT,
     }
@@ -42,18 +41,12 @@ public class BoatController : MonoBehaviour {
 	bool isAttack = false;
 	bool isDead = false;
 	bool isDamage = false;      // ダメージ時間中か
-	bool isLeft = false;        // 左向いてるか
     bool isMovingUp = false;    // 上行くか
 	bool isActed = false;       // 行動時間中か
 	bool isStartAct = false;    // 行動開始するか
 
     Animator anime;
-	// 漁船のSpriteRenderer反転用
-    SpriteRenderer spRender;
 
-	// 漁師のSpriteRenderer反転用
-	private FisherMan fisherMan;
-	SpriteRenderer fmRender;
 
 	// Use this for initialization
 	void Start () {
@@ -68,18 +61,6 @@ public class BoatController : MonoBehaviour {
 
 		// ボートのアニメーション開始
         anime = GetComponent<Animator>();
-        // スプライトレンダラ取得
-        // 画像の左右反転に使用する
-        spRender = GetComponent<SpriteRenderer>();
-
-        // ボートの向きをランダムに決める
-		isLeft = generalFunc.RandomBool();
-        spRender.flipX = isLeft;
-
-		// 漁師の向きをボートの向きに合わせる
-		FisherMan fisherMan =	this.GetComponentInChildren<FisherMan> ();
-		fmRender = 	fisherMan.GetComponent<SpriteRenderer> ();
-		fmRender.flipX = isLeft;
 
 		// 銛関係のマネージャ
 		GameObject obj = new GameObject("SpearManger");
@@ -104,16 +85,12 @@ public class BoatController : MonoBehaviour {
             if (isActed) AttackStandByTime();
             else Act();	// 行動後時間中でなければ行動
         }
-		// 船を移動させる
-		Move ();
-
 
         // ダメージ中の処理
 		// ダメージ時間中でなければ攻撃する
 		if (!Damage ()) {
 			isAttack = spearManager.Fire (
 				isAttack,
-				isLeft,
 				this.gameObject.transform,
 				boatSpear.gameObject.transform.position.x,
 				boatSpear.gameObject.transform.position.y,
@@ -155,31 +132,6 @@ public class BoatController : MonoBehaviour {
 		return false;
 	}
 
-	// 船を進行方向へ移動させる
-	void Move()
-	{
-		// 画面外に出そうなら反転
-		if (transform.position.x >= 4.0f || transform.position.x <= -4.0f) Reverse();
-
-		// 移動距離の設定
-		float moveX = 0.01f;
-		if (isLeft)	moveX = - moveX;
-
-        // 黄漁船のみ縦移動
-        float moveY = 0.00f;
-        //if (boatType == eBOAT_TYPE.YELLOW)
-        //{
-        //    moveY = 0.01f;
-        //    if (!isMovingUp) moveY = -moveY;
-        //}
-
-		// 現在地から移動距離分だけ進める
-		transform.position = new Vector3(
-			transform.position.x + moveX,
-			transform.position.y + moveY,
-			transform.position.z
-		);
-	}
 
     // ボート行動
     void Act()
@@ -194,11 +146,6 @@ public class BoatController : MonoBehaviour {
             case (int)eBOAT_ACT.IDLE:
                 break;
 
-			// 向きを変える
-			case (int)eBOAT_ACT.CHANGE_DIRECTION:
-				Reverse ();
-				break;
-
             //// 銛を撃つ
             //case (int)eBOAT_ACT.SHOT_SPEAR:
             //    // ダメージ時間中でなければ攻撃する
@@ -207,14 +154,6 @@ public class BoatController : MonoBehaviour {
 
         }
         isActed = true;
-    }
-
-	// ボートと漁師を反転
-	void Reverse()
-	{
-		isLeft = !isLeft;
-        spRender.flipX = isLeft;
-		fmRender.flipX = isLeft;
     }
 
 	// スタンバイ
