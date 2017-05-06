@@ -274,7 +274,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 115173150}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50cfa4b1cf7c84c009eff9785cf5e6a4, type: 3}
+  m_Script: {fileID: 11500000, guid: a16e593e840394a90ba69e46095dbbba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fisherman1: {fileID: 21300000, guid: f1f3e61fb55414b17ae68764c7531559, type: 3}
@@ -1160,7 +1160,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 739825314}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50cfa4b1cf7c84c009eff9785cf5e6a4, type: 3}
+  m_Script: {fileID: 11500000, guid: a16e593e840394a90ba69e46095dbbba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fisherman1: {fileID: 21300000, guid: f1f3e61fb55414b17ae68764c7531559, type: 3}
@@ -1233,11 +1233,11 @@ GameObject:
   - component: {fileID: 877573296}
   m_Layer: 0
   m_Name: company
-  m_TagString: Untagged
+  m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &877573293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2129,7 +2129,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1385181736}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50cfa4b1cf7c84c009eff9785cf5e6a4, type: 3}
+  m_Script: {fileID: 11500000, guid: a16e593e840394a90ba69e46095dbbba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fisherman1: {fileID: 21300000, guid: f1f3e61fb55414b17ae68764c7531559, type: 3}
