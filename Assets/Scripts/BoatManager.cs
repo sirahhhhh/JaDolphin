@@ -127,21 +127,7 @@ public class BoatManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		// 横方向
-		float moveX = 0.01f;
 
-
-		// 縦方向
-		float moveY = 0.01f;
-
-
-		// 現在地から移動距離分だけ進める
-		transform.position = new Vector3(
-			transform.position.x + moveX,
-			transform.position.y + moveY,
-			transform.position.z
-		);
-		
 	}
 
 	// アイテムドロップ
