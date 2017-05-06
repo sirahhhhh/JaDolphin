@@ -31,7 +31,6 @@ public class GameController : MonoBehaviour {
 		GameObject obj = new GameObject("BoatManager");
 		BoatManager bmAddComponet = obj.AddComponent<BoatManager> ();
 		boatManager = bmAddComponet;
-		//boatManager = new BoatManager ();
 		boatManager.Init (
 			createMinX,
 			createMaxX,

@@ -210,6 +210,7 @@ GameObject:
   m_Component:
   - component: {fileID: 115173151}
   - component: {fileID: 115173152}
+  - component: {fileID: 115173153}
   m_Layer: 0
   m_Name: jp
   m_TagString: Untagged
@@ -265,6 +266,20 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!114 &115173153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 115173150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50cfa4b1cf7c84c009eff9785cf5e6a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fisherman1: {fileID: 21300000, guid: f1f3e61fb55414b17ae68764c7531559, type: 3}
+  fisherman2: {fileID: 21300000, guid: 6549f7ce6042e422db269bdf4af14846, type: 3}
+  fisherman3: {fileID: 21300000, guid: 1d34a20a4873c48728d45c8ae9d38ad1, type: 3}
 --- !u!1001 &356421825
 Prefab:
   m_ObjectHideFlags: 0
@@ -1081,6 +1096,7 @@ GameObject:
   m_Component:
   - component: {fileID: 739825315}
   - component: {fileID: 739825316}
+  - component: {fileID: 739825317}
   m_Layer: 0
   m_Name: jp
   m_TagString: Untagged
@@ -1136,6 +1152,20 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!114 &739825317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 739825314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50cfa4b1cf7c84c009eff9785cf5e6a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fisherman1: {fileID: 21300000, guid: f1f3e61fb55414b17ae68764c7531559, type: 3}
+  fisherman2: {fileID: 21300000, guid: 6549f7ce6042e422db269bdf4af14846, type: 3}
+  fisherman3: {fileID: 21300000, guid: 1d34a20a4873c48728d45c8ae9d38ad1, type: 3}
 --- !u!1 &841524335
 GameObject:
   m_ObjectHideFlags: 0
@@ -2035,6 +2065,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1385181737}
   - component: {fileID: 1385181738}
+  - component: {fileID: 1385181739}
   m_Layer: 0
   m_Name: jp
   m_TagString: Untagged
@@ -2090,6 +2121,20 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!114 &1385181739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1385181736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50cfa4b1cf7c84c009eff9785cf5e6a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fisherman1: {fileID: 21300000, guid: f1f3e61fb55414b17ae68764c7531559, type: 3}
+  fisherman2: {fileID: 21300000, guid: 6549f7ce6042e422db269bdf4af14846, type: 3}
+  fisherman3: {fileID: 21300000, guid: 1d34a20a4873c48728d45c8ae9d38ad1, type: 3}
 --- !u!1 &1425179454
 GameObject:
   m_ObjectHideFlags: 0

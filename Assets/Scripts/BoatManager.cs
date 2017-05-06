@@ -60,7 +60,7 @@ public class BoatManager : MonoBehaviour {
 		float createY = Random.Range(createMinY, createMaxY);
 
 		GameObject Obj = (GameObject)Instantiate(
-            GetCreateBoatObj(),
+			GetCreateBoatObj(),
 			new Vector3(createX, createY, 0.0f),
 			Quaternion.identity
 		);
@@ -69,7 +69,7 @@ public class BoatManager : MonoBehaviour {
 	}
 
     // 生成するボートのコピー元ボートのGameObjectを取得する
-    private GameObject GetCreateBoatObj()
+	private GameObject GetCreateBoatObj()
     {
         // 生成する漁船を抽選
         int totalRatio = 0;
@@ -90,7 +90,7 @@ public class BoatManager : MonoBehaviour {
             }
         }
 
-        return japBoats[BoatIndex];
+		return japBoats[BoatIndex];
     }
 
 	public void Run()

@@ -26,7 +26,6 @@ public class BoatController : MonoBehaviour {
 
 	private SpearManager spearManager;	// 銛関係のマネージャ
 
-
     public float StartActTime;          // 行動を開始する時間
     public float MaxDamageTime;         // ダメージ時間の最大時間
     public float MaxAttackIntervalTime; // 攻撃間隔の最大時間
@@ -47,7 +46,12 @@ public class BoatController : MonoBehaviour {
 	bool isStartAct = false;    // 行動開始するか
 
     Animator anime;
+	// 漁船のSpriteRenderer反転用
     SpriteRenderer spRender;
+
+	// 漁師のSpriteRenderer反転用
+	private FisherMan fisherMan;
+	SpriteRenderer fmRender;
 
 	// Use this for initialization
 	void Start () {
@@ -66,6 +70,11 @@ public class BoatController : MonoBehaviour {
         // ボートの向きをランダムに決める
         isLeft = RandomBool();
         spRender.flipX = isLeft;
+
+		// 漁師の向きをボートの向きに合わせる
+		FisherMan fisherMan =		this.GetComponentInChildren<FisherMan> ();
+		fmRender = 	fisherMan.GetComponent<SpriteRenderer> ();
+		fmRender.flipX = isLeft;
 
 		// 銛関係のマネージャ
 		GameObject obj = new GameObject("SpearManger");
@@ -195,11 +204,12 @@ public class BoatController : MonoBehaviour {
         isActed = true;
     }
 
-	// ボートの反転
+	// ボートと漁師を反転
 	void Reverse()
 	{
 		isLeft = !isLeft;
         spRender.flipX = isLeft;
+		fmRender.flipX = isLeft;
     }
 
 	// スタンバイ
