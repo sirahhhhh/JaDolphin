@@ -11,6 +11,8 @@ public class CompanyBoat : MonoBehaviour {
 		1      // 横方向の方向転換
 	};
 
+	private GeneralFunc generalFunc;
+
 	bool isGoUP = false;		// 上方向に移動中かどうか
 	bool isLeft = false;        // 左向いてるか
 
@@ -20,15 +22,17 @@ public class CompanyBoat : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		generalFunc = new GeneralFunc ();
+
 		// スプライトレンダラ取得
 		// 画像の左右反転に使用する
 		spRender = GetComponent<SpriteRenderer>();
 
 		// ボートの向きをランダムに決める
-		isLeft = RandomBool();
+		isLeft = generalFunc.RandomBool();
 		spRender.flipX = isLeft;
 
-		isGoUP = RandomBool ();
+		isGoUP = generalFunc.RandomBool();
 		
 	}
 	
@@ -111,11 +115,5 @@ public class CompanyBoat : MonoBehaviour {
 	{
 		isLeft = !isLeft;
 		spRender.flipX = isLeft;
-	}
-
-	// bool値の乱数を返す関数
-	private static bool RandomBool()
-	{
-		return Random.Range(0, 2) == 0;
 	}
 }

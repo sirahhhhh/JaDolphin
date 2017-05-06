@@ -20,6 +20,8 @@ public class BoatController : MonoBehaviour {
         MAX_ACT,
     }
 
+	private GeneralFunc generalFunc;
+
     // 銛発射のためのObj
     public GameObject boatSpear;
     BoatSpear boatSpearScript;
@@ -55,6 +57,9 @@ public class BoatController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		// 他のクラスでも使う関数を切り出した
+		generalFunc = new GeneralFunc ();
+
         // コピー用銛をDeactiveに
         boatSpear.SetActive(false);
 
@@ -68,7 +73,7 @@ public class BoatController : MonoBehaviour {
         spRender = GetComponent<SpriteRenderer>();
 
         // ボートの向きをランダムに決める
-        isLeft = RandomBool();
+		isLeft = generalFunc.RandomBool();
         spRender.flipX = isLeft;
 
 		// 漁師の向きをボートの向きに合わせる
@@ -278,10 +283,4 @@ public class BoatController : MonoBehaviour {
     {
         return transform.position.y;
     }
-
-	// bool値の乱数を返す関数
-	private static bool RandomBool()
-	{
-		return Random.Range(0, 2) == 0;
-	}
 }
