@@ -49,6 +49,7 @@ public class BoatSpear : MonoBehaviour {
 	{
         this.gameObject.SetActive(true);
         isAlive = true;
+
 		// 左右の向きを親クラスから取得
 		moveX = this.GetComponentInParent<MoveX>();
 		isLeft = moveX.GetIsLeft ();
