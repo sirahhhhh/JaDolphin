@@ -72,9 +72,9 @@ public class BoatDamage : MonoBehaviour {
 		{
 			isDead = true;
 			// 爆発エフェクト
-			CreateExplosionEffect(explosion, this.transform.position.x, this.transform.position.y);
+			CreateExplosionEffect();
 			// アイテムドロップ
-			DropItem (itemHeart, this.transform.position.x, this.transform.position.y, this.GetComponent<BoatController>().boatType);
+			DropItem ();
 		}
 
 		return true;
@@ -97,8 +97,9 @@ public class BoatDamage : MonoBehaviour {
 	}
 
 	// アイテムドロップ
-	private void DropItem(GameObject itemHeart,float dropPosX, float dropPosY, BoatController.eBOAT_TYPE boatType)
+	private void DropItem()
 	{
+		BoatController.eBOAT_TYPE boatType = this.GetComponent<BoatController>().boatType;
 		// 漁船の種類が大でなければアイテムドロップ抽選
 		if (boatType != BoatController.eBOAT_TYPE.BIGGER)
 		{
@@ -118,21 +119,21 @@ public class BoatDamage : MonoBehaviour {
 			GameObject itemObj =
 				(GameObject)Instantiate(
 					itemHeart,
-					new Vector3(dropPosX + (adjustPosX * i), dropPosY, 0.0f),
+					new Vector3(this.transform.position.x + (adjustPosX * i), this.transform.position.y, 0.0f),
 					Quaternion.identity);
 			itemObj.SetActive(true);
 		}
 	}
 
 	// 爆発エフェクト生成
-	private void CreateExplosionEffect(GameObject explosion, float posX, float posY)
+	private void CreateExplosionEffect()
 	{
 		float adjustY = 0.1f;   // 少し下側に表示する
 
 		GameObject createObj =
 			(GameObject)Instantiate(
 				explosion,
-				new Vector3(posX, posY - adjustY, 0.0f),
+				new Vector3(this.transform.position.x, this.transform.position.y - adjustY, 0.0f),
 				Quaternion.identity);
 
 		createObj.SetActive(true);  // 有効に
