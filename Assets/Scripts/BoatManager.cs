@@ -70,15 +70,6 @@ public class BoatManager : MonoBehaviour {
 		this.lists.Add (Obj);
 	}
 
-	public void Run()
-	{
-		// ボート生成
-		this.CreateBoat();
-
-		// 沈められたボートListの削除
-		this.DeleteBoats ();
-	}
-
 	// ボートが沈められた時の処理
 	public void BoatDown(GameObject explosion, GameObject itemHeart,float posX, float posY, BoatController.eBOAT_TYPE boatType)
 	{
@@ -105,8 +96,11 @@ public class BoatManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		// 漁船関係の動作
-		Run ();
+		// ボート生成
+		this.CreateBoat();
+
+		// 沈められたボートListの削除
+		this.DeleteBoats ();
 
 	}
 
