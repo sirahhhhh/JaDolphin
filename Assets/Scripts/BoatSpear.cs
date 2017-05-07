@@ -43,14 +43,13 @@ public class BoatSpear : MonoBehaviour {
 
     // 銛発射
     // @param a_isLeft  左向きか
-	public void ShotSpear()
+	public void ShotSpear(bool a_isLeft)
 	{
         this.gameObject.SetActive(true);
         isAlive = true;
 
-		// 左右の向きを親クラスから取得
-		moveX = this.GetComponentInParent<MoveX>();
-		isLeft = moveX.GetIsLeft ();
+        // 左右の向き
+        isLeft = a_isLeft;
 
         // AwakeやStartより早くここを通るので
         // ここで設定しておく

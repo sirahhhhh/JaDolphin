@@ -17,8 +17,7 @@ public class SpearManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -52,10 +51,9 @@ public class SpearManager : MonoBehaviour {
 				posY,
 				0.0f),
 			Quaternion.identity);
-		createObj.transform.parent = trans; // 生成した銛の親を生成元ボートに設定
 
-		boatSpearScript = createObj.GetComponent<BoatSpear>();
-		boatSpearScript.ShotSpear();
+        boatSpearScript = createObj.GetComponent<BoatSpear>();
+		boatSpearScript.ShotSpear(isLeft);
 		isAttack = true;
 
 
