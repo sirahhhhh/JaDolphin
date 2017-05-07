@@ -25,7 +25,6 @@ public class BoatManager : MonoBehaviour {
 	private int maxJapBoats = 10;	// 漁船の最大数
 	private List<GameObject> lists = new List<GameObject>();	// ボートobjを保存しておくリスト
 
-	float itemDropRatio = 1 / 5.0f;	// アイテムドロップ率設定
 
 	public void Init(float minX, float maxX, float minY, float maxY, GameObject[] boats)
 	{

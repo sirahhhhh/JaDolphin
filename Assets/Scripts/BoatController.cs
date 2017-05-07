@@ -59,7 +59,7 @@ public class BoatController : MonoBehaviour {
 		// 設定値取得等の初期設定
 		InitSetting();
 
-		// ダメージ処理用
+		// ダメージの確認用
 		boatDamage = this.GetComponent<BoatDamage> ();
 
 		// 銛関係のマネージャ
