@@ -981,6 +981,8 @@ GameObject:
   - component: {fileID: 672138583}
   - component: {fileID: 672138586}
   - component: {fileID: 672138587}
+  - component: {fileID: 672138588}
+  - component: {fileID: 672138589}
   m_Layer: 0
   m_Name: Boat
   m_TagString: Untagged
@@ -1065,10 +1067,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boatSpear: {fileID: 878442896}
   StartActTime: 2
-  MaxDamageTime: 0.5
   MaxAttackIntervalTime: 1.3
   MaxActIntervalTime: 3
-  MaxHP: 100
   boatType: 0
 --- !u!95 &672138587
 Animator:
@@ -1087,6 +1087,32 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &672138588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 672138582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adf87fe969e474ac98341cc1e098e08c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &672138589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 672138582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efb7577fd748648efb6cd64524678686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemHeart: {fileID: 2004419466}
+  explosion: {fileID: 1668947222}
+  MaxDamageTime: 0.5
+  MaxHP: 100
 --- !u!1 &739825314
 GameObject:
   m_ObjectHideFlags: 0
@@ -1231,6 +1257,8 @@ GameObject:
   - component: {fileID: 877573294}
   - component: {fileID: 877573293}
   - component: {fileID: 877573296}
+  - component: {fileID: 877573297}
+  - component: {fileID: 877573298}
   m_Layer: 0
   m_Name: company
   m_TagString: EnemyAttack
@@ -1311,6 +1339,28 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.64, y: 0.64}
+--- !u!114 &877573297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 877573292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adf87fe969e474ac98341cc1e098e08c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &877573298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 877573292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aae795a8ffca84da19c560768237e131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &878442896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1739,6 +1789,9 @@ GameObject:
   - component: {fileID: 1101368448}
   - component: {fileID: 1101368447}
   - component: {fileID: 1101368446}
+  - component: {fileID: 1101368451}
+  - component: {fileID: 1101368452}
+  - component: {fileID: 1101368453}
   m_Layer: 0
   m_Name: YellowBoat
   m_TagString: Untagged
@@ -1776,10 +1829,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boatSpear: {fileID: 388122275}
   StartActTime: 2
-  MaxDamageTime: 0.5
   MaxAttackIntervalTime: 1.3
   MaxActIntervalTime: 3
-  MaxHP: 50
   boatType: 1
 --- !u!61 &1101368448
 BoxCollider2D:
@@ -1845,6 +1896,43 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1101368451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1101368445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adf87fe969e474ac98341cc1e098e08c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1101368452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1101368445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aae795a8ffca84da19c560768237e131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1101368453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1101368445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efb7577fd748648efb6cd64524678686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemHeart: {fileID: 2004419466}
+  explosion: {fileID: 1668947222}
+  MaxDamageTime: 0.5
+  MaxHP: 50
 --- !u!1 &1297693356
 GameObject:
   m_ObjectHideFlags: 0
@@ -2206,6 +2294,8 @@ GameObject:
   - component: {fileID: 1428060618}
   - component: {fileID: 1428060617}
   - component: {fileID: 1428060616}
+  - component: {fileID: 1428060621}
+  - component: {fileID: 1428060622}
   m_Layer: 0
   m_Name: BiggerBoat
   m_TagString: Untagged
@@ -2243,10 +2333,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boatSpear: {fileID: 1834170757}
   StartActTime: 2
-  MaxDamageTime: 0.5
   MaxAttackIntervalTime: 1.3
   MaxActIntervalTime: 3
-  MaxHP: 1000
   boatType: 2
 --- !u!61 &1428060618
 BoxCollider2D:
@@ -2312,6 +2400,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1428060621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1428060615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adf87fe969e474ac98341cc1e098e08c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1428060622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1428060615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efb7577fd748648efb6cd64524678686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemHeart: {fileID: 2004419466}
+  explosion: {fileID: 1668947222}
+  MaxDamageTime: 0.5
+  MaxHP: 1000
 --- !u!1 &1664372712
 GameObject:
   m_ObjectHideFlags: 0

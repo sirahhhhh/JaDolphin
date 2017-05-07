@@ -15,6 +15,9 @@ public class BoatSpear : MonoBehaviour {
     bool isAlive;                   // 銛存在フラグ
     bool isLeft;                    // 左向きか
 
+	private MoveX moveX;
+
+
     // Use this for initialization
     void Start () {
         // 銛の速度と進む向きを決定
@@ -25,7 +28,6 @@ public class BoatSpear : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (!isAlive) return;
-
         // 銛移動処理
 		transform.position = new Vector3(
 			transform.position.x + SpearSpeed,
@@ -41,11 +43,14 @@ public class BoatSpear : MonoBehaviour {
 
     // 銛発射
     // @param a_isLeft  左向きか
-	public void ShotSpear(bool a_isLeft)
+	public void ShotSpear()
 	{
         this.gameObject.SetActive(true);
         isAlive = true;
-        isLeft = a_isLeft;
+
+		// 左右の向きを親クラスから取得
+		moveX = this.GetComponentInParent<MoveX>();
+		isLeft = moveX.GetIsLeft ();
 
         // AwakeやStartより早くここを通るので
         // ここで設定しておく
@@ -73,5 +78,11 @@ public class BoatSpear : MonoBehaviour {
 	public bool GetAlive()
 	{
 		return isAlive;
+	}
+
+	// 他のクラスからの
+	public bool GetIsLeft()
+	{
+		return isLeft;
 	}
 }

@@ -15,6 +15,8 @@ public class BoatManager : MonoBehaviour {
 	private float passTime; // 生成時に使う経過時間
 	private int DownBoats;  // 沈めたボート数
 
+	private GeneralFunc generalFunc;
+
 	// ボート生成時の最大、最小座標
 	private float createMinX, createMaxX;
 	private float createMinY, createMaxY;
@@ -23,7 +25,6 @@ public class BoatManager : MonoBehaviour {
 	private int maxJapBoats = 10;	// 漁船の最大数
 	private List<GameObject> lists = new List<GameObject>();	// ボートobjを保存しておくリスト
 
-	float itemDropRatio;            // アイテムドロップ率
 
 	public void Init(float minX, float maxX, float minY, float maxY, GameObject[] boats)
 	{
@@ -60,7 +61,7 @@ public class BoatManager : MonoBehaviour {
 		float createY = Random.Range(createMinY, createMaxY);
 
 		GameObject Obj = (GameObject)Instantiate(
-			GetCreateBoatObj(),
+			japBoats[generalFunc.SelectInt(CreateBoatRatio)],
 			new Vector3(createX, createY, 0.0f),
 			Quaternion.identity
 		);
@@ -68,50 +69,11 @@ public class BoatManager : MonoBehaviour {
 		this.lists.Add (Obj);
 	}
 
-    // 生成するボートのコピー元ボートのGameObjectを取得する
-	private GameObject GetCreateBoatObj()
-    {
-        // 生成する漁船を抽選
-        int totalRatio = 0;
-        for(int i = 0; i < CreateBoatRatio.Length; i++)
-        {
-            totalRatio += CreateBoatRatio[i];
-        }
-        int BoatIndex = 0;
-        int ranVal = Random.Range(0, totalRatio + 1);
-        for (int i = 0; i < CreateBoatRatio.Length; i++)
-        {
-            ranVal -= CreateBoatRatio[i];
-            // 0以下で抽選決定
-            if(ranVal <= 0)
-            {
-                BoatIndex = i;
-                break;
-            }
-        }
-
-		return japBoats[BoatIndex];
-    }
-
-	public void Run()
-	{
-		// ボート生成
-		this.CreateBoat();
-
-		// 沈められたボートListの削除
-		this.DeleteBoats ();
-	}
-
 	// ボートが沈められた時の処理
-	public void BoatDown(GameObject explosion, GameObject itemHeart,float posX, float posY, BoatController.eBOAT_TYPE boatType)
+	public void BoatDown()
 	{
 		// 沈めたボートの数をカウント
 		DownBoats++;
-		//Debug.Log("downs : " + DownBoats);
-		// 爆発エフェクト
-		CreateExplosionEffect(explosion, posX,posY);
-		// アイテムドロップ
-		DropItem (itemHeart, posX, posY, boatType);
 	}
 
 	// 沈めたボートの数を返す
@@ -122,53 +84,15 @@ public class BoatManager : MonoBehaviour {
 		
 	// Use this for initialization
 	void Start () {
-		itemDropRatio = 1 / 5.0f;   // アイテムドロップ率設定
+		generalFunc = new GeneralFunc ();
 	}
 
 	// Update is called once per frame
 	void Update () {
-		
-	}
+		// ボート生成
+		this.CreateBoat();
 
-	// アイテムドロップ
-	private void DropItem(GameObject itemHeart,float dropPosX, float dropPosY, BoatController.eBOAT_TYPE boatType)
-	{
-        // 漁船の種類が大でなければアイテムドロップ抽選
-        if (boatType != BoatController.eBOAT_TYPE.BIGGER)
-        {
-            // 0.0～1.0からの値をランダムで取得して
-            // 指定割合以下ならアイテムドロップする
-            if (Random.value > itemDropRatio) return;
-        }
-
-        int itemDropNums = 1;   // アイテムドロップの数
-        float adjustPosX = 0.5f;
-
-        // 漁船(大)ならアイテムを複数ドロップ
-        if (boatType == BoatController.eBOAT_TYPE.BIGGER) itemDropNums = 3;
-        for (int i = 0; i < itemDropNums; i++)
-        {
-            // ボートが居た場所にドロップする
-            GameObject itemObj =
-                (GameObject)Instantiate(
-                    itemHeart,
-                    new Vector3(dropPosX + (adjustPosX * i), dropPosY, 0.0f),
-                    Quaternion.identity);
-            itemObj.SetActive(true);
-        }
-	}
-
-	// 爆発エフェクト生成
-	private void CreateExplosionEffect(GameObject explosion, float posX, float posY)
-	{
-		float adjustY = 0.1f;   // 少し下側に表示する
-
-		GameObject createObj =
-			(GameObject)Instantiate(
-				explosion,
-				new Vector3(posX, posY - adjustY, 0.0f),
-				Quaternion.identity);
-
-		createObj.SetActive(true);  // 有効に
+		// 沈められたボートListの削除
+		this.DeleteBoats ();
 	}
 }

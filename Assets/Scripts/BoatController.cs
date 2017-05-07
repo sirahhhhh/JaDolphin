@@ -15,10 +15,13 @@ public class BoatController : MonoBehaviour {
     enum eBOAT_ACT
     {
         IDLE,                      // なにもしない
-		CHANGE_DIRECTION,			// 向きを変える
 //        SHOT_SPEAR,                // 銛を撃つ
         MAX_ACT,
     }
+
+	private GeneralFunc generalFunc;
+	private MoveX moveX;
+	private bool isLeft;
 
     // 銛発射のためのObj
     public GameObject boatSpear;
@@ -27,54 +30,37 @@ public class BoatController : MonoBehaviour {
 	private SpearManager spearManager;	// 銛関係のマネージャ
 
     public float StartActTime;          // 行動を開始する時間
-    public float MaxDamageTime;         // ダメージ時間の最大時間
     public float MaxAttackIntervalTime; // 攻撃間隔の最大時間
     public float MaxActIntervalTime;    // 行動間隔の最大時間
-    public int MaxHP;
     public eBOAT_TYPE boatType; // 漁船の種類
 
-	float DamageTime;           // ダメージ時間
 	float attackIntervalTime;   // 攻撃間隔の時間
 	float actIntervalTime;      // 行動間隔の時間
-	int HitPoint;
 	bool isAttack = false;
-	bool isDead = false;
-	bool isDamage = false;      // ダメージ時間中か
-	bool isLeft = false;        // 左向いてるか
     bool isMovingUp = false;    // 上行くか
 	bool isActed = false;       // 行動時間中か
 	bool isStartAct = false;    // 行動開始するか
 
-    Animator anime;
-	// 漁船のSpriteRenderer反転用
-    SpriteRenderer spRender;
-
-	// 漁師のSpriteRenderer反転用
-	private FisherMan fisherMan;
-	SpriteRenderer fmRender;
+	// ダメージ処理用
+	private BoatDamage boatDamage;
 
 	// Use this for initialization
 	void Start () {
+		// 他のクラスでも使う関数を切り出した
+		generalFunc = new GeneralFunc ();
+
+		// 左右の向きを親クラスから取得
+		moveX = this.GetComponentInParent<MoveX>();
+		isLeft = moveX.GetIsLeft ();
+
         // コピー用銛をDeactiveに
         boatSpear.SetActive(false);
 
 		// 設定値取得等の初期設定
 		InitSetting();
 
-		// ボートのアニメーション開始
-        anime = GetComponent<Animator>();
-        // スプライトレンダラ取得
-        // 画像の左右反転に使用する
-        spRender = GetComponent<SpriteRenderer>();
-
-        // ボートの向きをランダムに決める
-        isLeft = RandomBool();
-        spRender.flipX = isLeft;
-
-		// 漁師の向きをボートの向きに合わせる
-		FisherMan fisherMan =		this.GetComponentInChildren<FisherMan> ();
-		fmRender = 	fisherMan.GetComponent<SpriteRenderer> ();
-		fmRender.flipX = isLeft;
+		// ダメージの確認用
+		boatDamage = this.GetComponent<BoatDamage> ();
 
 		// 銛関係のマネージャ
 		GameObject obj = new GameObject("SpearManger");
@@ -87,6 +73,7 @@ public class BoatController : MonoBehaviour {
         // 行動開始するまでの待機処理
 		StandBy();
 
+		isLeft = moveX.GetIsLeft ();
 
         // 攻撃中なら攻撃間隔時間を減らして0以下になれば
         // 次の攻撃が出来る
@@ -99,13 +86,10 @@ public class BoatController : MonoBehaviour {
             if (isActed) AttackStandByTime();
             else Act();	// 行動後時間中でなければ行動
         }
-		// 船を移動させる
-		Move ();
-
 
         // ダメージ中の処理
 		// ダメージ時間中でなければ攻撃する
-		if (!Damage ()) {
+		if(!boatDamage.Damage()){
 			isAttack = spearManager.Fire (
 				isAttack,
 				isLeft,
@@ -125,55 +109,8 @@ public class BoatController : MonoBehaviour {
 	// 設定値取得等の初期設定
 	void InitSetting()
 	{
-		DamageTime  = MaxDamageTime;
-		HitPoint    = MaxHP;
 		attackIntervalTime = MaxAttackIntervalTime;
 		actIntervalTime = MaxActIntervalTime;
-	}
-
-	// ダメージ中の処理
-	bool Damage()
-	{
-		// ダメージ時間減衰
-		// ダメージ受けて一定時間は次のダメージを受けない
-		if (isDamage)
-		{
-			DamageTime -= Time.deltaTime;
-			if (DamageTime <= 0.0f)
-			{
-				DamageTime = 0.0f;
-				isDamage = false;
-				anime.SetBool("IsDamage", isDamage);    // ダメージ中アニメに切り替え
-			}
-			return true;
-		}
-		return false;
-	}
-
-	// 船を進行方向へ移動させる
-	void Move()
-	{
-		// 画面外に出そうなら反転
-		if (transform.position.x >= 4.0f || transform.position.x <= -4.0f) Reverse();
-
-		// 移動距離の設定
-		float moveX = 0.01f;
-		if (isLeft)	moveX = - moveX;
-
-        // 黄漁船のみ縦移動
-        float moveY = 0.00f;
-        //if (boatType == eBOAT_TYPE.YELLOW)
-        //{
-        //    moveY = 0.01f;
-        //    if (!isMovingUp) moveY = -moveY;
-        //}
-
-		// 現在地から移動距離分だけ進める
-		transform.position = new Vector3(
-			transform.position.x + moveX,
-			transform.position.y + moveY,
-			transform.position.z
-		);
 	}
 
     // ボート行動
@@ -189,11 +126,6 @@ public class BoatController : MonoBehaviour {
             case (int)eBOAT_ACT.IDLE:
                 break;
 
-			// 向きを変える
-			case (int)eBOAT_ACT.CHANGE_DIRECTION:
-				Reverse ();
-				break;
-
             //// 銛を撃つ
             //case (int)eBOAT_ACT.SHOT_SPEAR:
             //    // ダメージ時間中でなければ攻撃する
@@ -202,14 +134,6 @@ public class BoatController : MonoBehaviour {
 
         }
         isActed = true;
-    }
-
-	// ボートと漁師を反転
-	void Reverse()
-	{
-		isLeft = !isLeft;
-        spRender.flipX = isLeft;
-		fmRender.flipX = isLeft;
     }
 
 	// スタンバイ
@@ -238,50 +162,5 @@ public class BoatController : MonoBehaviour {
 			attackIntervalTime = MaxAttackIntervalTime;
 			isAttack = false;
 		}
-	}
-
-    // ボートダメージ処理
-    // @return true     ダメージ処理できた
-    //         false    ダメージ時間中
-    public bool DamageBoat( int AttackPower )
-    {
-        // ダメージ時間中なら処理しない
-        if (isDamage) return false;
-
-        // ダメージ時間
-        isDamage = true;
-        DamageTime = MaxDamageTime;
-        anime.SetBool("IsDamage", isDamage);
-
-        // ダメージ処理
-        HitPoint -= AttackPower;
-        if(HitPoint <= 0)
-        {
-            isDead = true;
-        }
-
-        return true;
-    }
-
-    // 死亡フラグ取得
-    public bool IsDead()
-    {
-        return isDead;
-    }
-
-    public float GetPosX()
-    {
-        return transform.position.x;
-    }
-
-    public float GetPosY()
-    {
-        return transform.position.y;
-    }
-
-	// bool値の乱数を返す関数
-	private static bool RandomBool()
-	{
-		return Random.Range(0, 2) == 0;
 	}
 }
