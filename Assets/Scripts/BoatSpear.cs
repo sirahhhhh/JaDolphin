@@ -27,8 +27,6 @@ public class BoatSpear : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		isLeft = moveX.GetIsLeft ();
-
         if (!isAlive) return;
         // 銛移動処理
 		transform.position = new Vector3(

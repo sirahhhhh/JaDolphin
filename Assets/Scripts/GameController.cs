@@ -56,9 +56,6 @@ public class GameController : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-		// 漁船関係の動作
-		boatManager.Run ();
-
 		// スコア表示
  		ScoreLabel.text = "しずめた数 : " + boatManager.GetDownBoat();
 

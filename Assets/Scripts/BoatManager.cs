@@ -105,6 +105,8 @@ public class BoatManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		// 漁船関係の動作
+		Run ();
 
 	}
 

@@ -30,25 +30,20 @@ public class BoatController : MonoBehaviour {
 	private SpearManager spearManager;	// 銛関係のマネージャ
 
     public float StartActTime;          // 行動を開始する時間
-    public float MaxDamageTime;         // ダメージ時間の最大時間
     public float MaxAttackIntervalTime; // 攻撃間隔の最大時間
     public float MaxActIntervalTime;    // 行動間隔の最大時間
-    public int MaxHP;
     public eBOAT_TYPE boatType; // 漁船の種類
 
-	float DamageTime;           // ダメージ時間
 	float attackIntervalTime;   // 攻撃間隔の時間
 	float actIntervalTime;      // 行動間隔の時間
-	int HitPoint;
 	bool isAttack = false;
-	bool isDead = false;
-	bool isDamage = false;      // ダメージ時間中か
     bool isMovingUp = false;    // 上行くか
 	bool isActed = false;       // 行動時間中か
 	bool isStartAct = false;    // 行動開始するか
 
     Animator anime;
 
+	private BoatDamage boatDamage;
 
 	// Use this for initialization
 	void Start () {
@@ -64,6 +59,8 @@ public class BoatController : MonoBehaviour {
 
 		// 設定値取得等の初期設定
 		InitSetting();
+
+		boatDamage = this.GetComponent<BoatDamage> ();
 
 		// ボートのアニメーション開始
         anime = GetComponent<Animator>();
@@ -95,7 +92,7 @@ public class BoatController : MonoBehaviour {
 
         // ダメージ中の処理
 		// ダメージ時間中でなければ攻撃する
-		if (!Damage ()) {
+		if(!boatDamage.Damage()){
 			isAttack = spearManager.Fire (
 				isAttack,
 				isLeft,
@@ -115,31 +112,9 @@ public class BoatController : MonoBehaviour {
 	// 設定値取得等の初期設定
 	void InitSetting()
 	{
-		DamageTime  = MaxDamageTime;
-		HitPoint    = MaxHP;
 		attackIntervalTime = MaxAttackIntervalTime;
 		actIntervalTime = MaxActIntervalTime;
 	}
-
-	// ダメージ中の処理
-	bool Damage()
-	{
-		// ダメージ時間減衰
-		// ダメージ受けて一定時間は次のダメージを受けない
-		if (isDamage)
-		{
-			DamageTime -= Time.deltaTime;
-			if (DamageTime <= 0.0f)
-			{
-				DamageTime = 0.0f;
-				isDamage = false;
-				anime.SetBool("IsDamage", isDamage);    // ダメージ中アニメに切り替え
-			}
-			return true;
-		}
-		return false;
-	}
-
 
     // ボート行動
     void Act()
@@ -191,43 +166,4 @@ public class BoatController : MonoBehaviour {
 			isAttack = false;
 		}
 	}
-
-    // ボートダメージ処理
-    // @return true     ダメージ処理できた
-    //         false    ダメージ時間中
-    public bool DamageBoat( int AttackPower )
-    {
-        // ダメージ時間中なら処理しない
-        if (isDamage) return false;
-
-        // ダメージ時間
-        isDamage = true;
-        DamageTime = MaxDamageTime;
-        anime.SetBool("IsDamage", isDamage);
-
-        // ダメージ処理
-        HitPoint -= AttackPower;
-        if(HitPoint <= 0)
-        {
-            isDead = true;
-        }
-
-        return true;
-    }
-
-    // 死亡フラグ取得
-    public bool IsDead()
-    {
-        return isDead;
-    }
-
-    public float GetPosX()
-    {
-        return transform.position.x;
-    }
-
-    public float GetPosY()
-    {
-        return transform.position.y;
-    }
 }

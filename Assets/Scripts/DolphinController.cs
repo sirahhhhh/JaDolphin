@@ -163,16 +163,17 @@ public class DolphinController : MonoBehaviour {
         //　アイテムなら処理しない
         if (collision.gameObject.tag == "Items") return;
 
-        BoatController BoatCtrl = collision.gameObject.GetComponent<BoatController>();
+ 		BoatDamage boatDamage = collision.gameObject.GetComponent<BoatDamage> ();
 
         // ダメージ処理でfalseが帰ってきたらまだダメージ時間中
-        if (!BoatCtrl.DamageBoat(AttackPower)) return;
-        // ヒットSE再生
+		if (!boatDamage.DamageBoat(AttackPower)) return;
+		// ヒットSE再生
         hitSE.Play();
 
         // 船を沈める処理
-		if (BoatCtrl.IsDead())
-			gameCtrl.DownBoat(collision.gameObject,BoatCtrl.GetPosX(), BoatCtrl.GetPosY());
+		if (boatDamage.IsDead())
+			gameCtrl.DownBoat(collision.gameObject,boatDamage.GetPosX(), boatDamage.GetPosY());
+
     }
 
     // ダメージ時(攻撃を受けたとき)の判定にしか使ってません
