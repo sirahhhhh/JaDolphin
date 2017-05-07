@@ -41,8 +41,7 @@ public class BoatController : MonoBehaviour {
 	bool isActed = false;       // 行動時間中か
 	bool isStartAct = false;    // 行動開始するか
 
-    Animator anime;
-
+	// ダメージ処理用
 	private BoatDamage boatDamage;
 
 	// Use this for initialization
@@ -60,10 +59,8 @@ public class BoatController : MonoBehaviour {
 		// 設定値取得等の初期設定
 		InitSetting();
 
+		// ダメージ処理用
 		boatDamage = this.GetComponent<BoatDamage> ();
-
-		// ボートのアニメーション開始
-        anime = GetComponent<Animator>();
 
 		// 銛関係のマネージャ
 		GameObject obj = new GameObject("SpearManger");
