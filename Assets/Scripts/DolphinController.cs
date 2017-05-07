@@ -233,5 +233,4 @@ public class DolphinController : MonoBehaviour {
 		AttackPower = MaxAttackPower;
 		DamageTime = MaxDamageTime;
 	}
-
 }
