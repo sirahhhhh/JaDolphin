@@ -10,8 +10,6 @@ public class GameController : MonoBehaviour {
     public float createMinX, createMaxX;
     public float createMinY, createMaxY;
     public GameObject[] japBoats;   // 漁船のコピー元Obj
-    public GameObject itemHeart;    // ハートアイテムObj
-    public GameObject explosion;    // 爆発エフェクトObj
 
 	private BoatManager	boatManager; // 漁船関係をまとめるクラス
 
@@ -56,9 +54,6 @@ public class GameController : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-		// 漁船関係の動作
-		boatManager.Run ();
-
 		// スコア表示
  		ScoreLabel.text = "しずめた数 : " + boatManager.GetDownBoat();
 
@@ -88,12 +83,11 @@ public class GameController : MonoBehaviour {
 
     // ボートが沈んだら
     // 現状、沈めたボート数を加算する
-	public void DownBoat(GameObject obj,float posX, float posY)
+	public void DownBoat()
     {
 		// 沈めた数を加算
-		boatManager.BoatDown (explosion, itemHeart, posX, posY, obj.GetComponent<BoatController>().boatType);
-		// ボート破棄
-		Destroy(obj);
+		boatManager.BoatDown ();
+
     }
 
     // リトライボタン押下時
