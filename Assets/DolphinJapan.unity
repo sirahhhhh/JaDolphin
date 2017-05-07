@@ -1109,6 +1109,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efb7577fd748648efb6cd64524678686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemHeart: {fileID: 2004419466}
+  explosion: {fileID: 1668947222}
   MaxDamageTime: 0.5
   MaxHP: 100
 --- !u!1 &739825314
@@ -1927,6 +1929,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efb7577fd748648efb6cd64524678686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemHeart: {fileID: 2004419466}
+  explosion: {fileID: 1668947222}
   MaxDamageTime: 0.5
   MaxHP: 50
 --- !u!1 &1297693356
@@ -2418,6 +2422,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efb7577fd748648efb6cd64524678686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemHeart: {fileID: 2004419466}
+  explosion: {fileID: 1668947222}
   MaxDamageTime: 0.5
   MaxHP: 1000
 --- !u!1 &1664372712

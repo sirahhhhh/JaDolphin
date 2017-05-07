@@ -172,8 +172,10 @@ public class DolphinController : MonoBehaviour {
 
         // 船を沈める処理
 		if (boatDamage.IsDead())
-			gameCtrl.DownBoat(collision.gameObject,boatDamage.GetPosX(), boatDamage.GetPosY());
-
+		{
+			gameCtrl.DownBoat();
+			Destroy (collision.gameObject);
+		}
     }
 
     // ダメージ時(攻撃を受けたとき)の判定にしか使ってません

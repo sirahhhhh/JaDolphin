@@ -25,7 +25,7 @@ public class BoatManager : MonoBehaviour {
 	private int maxJapBoats = 10;	// 漁船の最大数
 	private List<GameObject> lists = new List<GameObject>();	// ボートobjを保存しておくリスト
 
-	float itemDropRatio;            // アイテムドロップ率
+	float itemDropRatio = 1 / 5.0f;	// アイテムドロップ率設定
 
 	public void Init(float minX, float maxX, float minY, float maxY, GameObject[] boats)
 	{
@@ -71,15 +71,10 @@ public class BoatManager : MonoBehaviour {
 	}
 
 	// ボートが沈められた時の処理
-	public void BoatDown(GameObject explosion, GameObject itemHeart,float posX, float posY, BoatController.eBOAT_TYPE boatType)
+	public void BoatDown()
 	{
 		// 沈めたボートの数をカウント
 		DownBoats++;
-		//Debug.Log("downs : " + DownBoats);
-		// 爆発エフェクト
-		CreateExplosionEffect(explosion, posX,posY);
-		// アイテムドロップ
-		DropItem (itemHeart, posX, posY, boatType);
 	}
 
 	// 沈めたボートの数を返す
@@ -91,7 +86,6 @@ public class BoatManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		generalFunc = new GeneralFunc ();
-		itemDropRatio = 1 / 5.0f;   // アイテムドロップ率設定
 	}
 
 	// Update is called once per frame
@@ -101,48 +95,5 @@ public class BoatManager : MonoBehaviour {
 
 		// 沈められたボートListの削除
 		this.DeleteBoats ();
-
-	}
-
-	// アイテムドロップ
-	private void DropItem(GameObject itemHeart,float dropPosX, float dropPosY, BoatController.eBOAT_TYPE boatType)
-	{
-        // 漁船の種類が大でなければアイテムドロップ抽選
-        if (boatType != BoatController.eBOAT_TYPE.BIGGER)
-        {
-            // 0.0～1.0からの値をランダムで取得して
-            // 指定割合以下ならアイテムドロップする
-            if (Random.value > itemDropRatio) return;
-        }
-
-        int itemDropNums = 1;   // アイテムドロップの数
-        float adjustPosX = 0.5f;
-
-        // 漁船(大)ならアイテムを複数ドロップ
-        if (boatType == BoatController.eBOAT_TYPE.BIGGER) itemDropNums = 3;
-        for (int i = 0; i < itemDropNums; i++)
-        {
-            // ボートが居た場所にドロップする
-            GameObject itemObj =
-                (GameObject)Instantiate(
-                    itemHeart,
-                    new Vector3(dropPosX + (adjustPosX * i), dropPosY, 0.0f),
-                    Quaternion.identity);
-            itemObj.SetActive(true);
-        }
-	}
-
-	// 爆発エフェクト生成
-	private void CreateExplosionEffect(GameObject explosion, float posX, float posY)
-	{
-		float adjustY = 0.1f;   // 少し下側に表示する
-
-		GameObject createObj =
-			(GameObject)Instantiate(
-				explosion,
-				new Vector3(posX, posY - adjustY, 0.0f),
-				Quaternion.identity);
-
-		createObj.SetActive(true);  // 有効に
 	}
 }
