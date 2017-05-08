@@ -19,13 +19,23 @@ public class BoatController : MonoBehaviour {
         MAX_ACT,
     }
 
-	private GeneralFunc generalFunc;
+	//private GeneralFunc generalFunc;
 	private MoveX moveX;
 	private bool isLeft;
 
     // 銛発射のためのObj
     public GameObject boatSpear;
     BoatSpear boatSpearScript;
+
+	// ダメージ処理用
+	private BoatDamage boatDamage;
+
+	// 一斉攻撃のタイミング取得用
+	// BoatManagerはGameController経由で取得
+	GameObject gameControllerObj;
+	GameController gameCtrl;
+	private GameObject boatManagerObj;
+	private BoatManager boatManager;
 
 	private SpearManager spearManager;	// 銛関係のマネージャ
 
@@ -41,13 +51,10 @@ public class BoatController : MonoBehaviour {
 	bool isActed = false;       // 行動時間中か
 	bool isStartAct = false;    // 行動開始するか
 
-	// ダメージ処理用
-	private BoatDamage boatDamage;
-
 	// Use this for initialization
 	void Start () {
 		// 他のクラスでも使う関数を切り出した
-		generalFunc = new GeneralFunc ();
+		//generalFunc = new GeneralFunc ();
 
 		// 左右の向きを親クラスから取得
 		moveX = this.GetComponentInParent<MoveX>();
@@ -55,6 +62,13 @@ public class BoatController : MonoBehaviour {
 
         // コピー用銛をDeactiveに
         boatSpear.SetActive(false);
+
+		// 一斉攻撃のタイミング取得用
+		// BoatManagerはGameController経由で取得
+		gameControllerObj = GameObject.FindWithTag("GameController");
+		gameCtrl = gameControllerObj.GetComponent<GameController>();
+		boatManager = gameCtrl.GetBoatManager ();
+
 
 		// 設定値取得等の初期設定
 		InitSetting();
@@ -87,10 +101,15 @@ public class BoatController : MonoBehaviour {
             else Act();	// 行動後時間中でなければ行動
         }
 
+		// 一斉攻撃待機中か確認
+		bool AllOutAttackStandBy = boatManager.AllOutAttackStandBy();
+		if (AllOutAttackStandBy) return; // 一斉攻撃待機中は普通の攻撃はしないので抜ける
+
         // ダメージ中の処理
 		// ダメージ時間中でなければ攻撃する
 		if(!boatDamage.Damage()){
 			isAttack = spearManager.Fire (
+				false,
 				isAttack,
 				isLeft,
 				this.gameObject.transform,
@@ -161,6 +180,34 @@ public class BoatController : MonoBehaviour {
 		{
 			attackIntervalTime = MaxAttackIntervalTime;
 			isAttack = false;
+		}
+	}
+
+	// 一斉攻撃
+	public void AllOutAttack()
+	{
+		bool gomiFlag;
+		for(int i=0; i<2; i++){
+			gomiFlag = spearManager.Fire (
+				true,
+				false,
+				isLeft,
+				this.gameObject.transform,
+				boatSpear.gameObject.transform.position.x,
+				boatSpear.gameObject.transform.position.y,
+				boatSpear,
+				boatType
+			);
+			gomiFlag = spearManager.Fire (
+				true,
+				false,
+				!isLeft,
+				this.gameObject.transform,
+				boatSpear.gameObject.transform.position.x,
+				boatSpear.gameObject.transform.position.y,
+				boatSpear,
+				boatType
+		);
 		}
 	}
 }

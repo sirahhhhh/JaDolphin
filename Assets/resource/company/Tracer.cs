@@ -7,8 +7,6 @@ public class Tracer : MonoBehaviour {
 	private GameObject dolphinControllerObj;
 	private DolphinController dolphinCtrl;
 
-	bool isLeft = false;        // 左向いてるか
-
 	// 横反転のためのSpriteRenderer
 	SpriteRenderer spRender;
 

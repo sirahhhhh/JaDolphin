@@ -25,10 +25,11 @@ public class SpearManager : MonoBehaviour {
 	}
 
 	// ボートの槍攻撃
-	public bool Fire(bool isAttack,bool isLeft, Transform trans,float posX,float posY,GameObject boatSpear, BoatController.eBOAT_TYPE boatType)
+	public bool Fire(bool AllOutAttack ,bool isAttack,bool isLeft, Transform trans,float posX,float posY,GameObject boatSpear, BoatController.eBOAT_TYPE boatType)
 	{
 		// 発射可能な最大数の銛を撃っていたら攻撃しない
-		if (spears.Count >= maxSpears[(int)boatType]) return isAttack;
+		// 一斉攻撃フラグが立っている時は無視
+		if (spears.Count >= maxSpears[(int)boatType] && !AllOutAttack) return isAttack;
 		// 攻撃中なら中断
 		if (isAttack) return isAttack;
 
