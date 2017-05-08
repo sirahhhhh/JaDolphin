@@ -18,7 +18,10 @@ public class BoatManager : MonoBehaviour {
 	// 一斉攻撃用変数
 	private bool AllOutAttackEnable = false;	// 一斉攻撃用フラグ
 	private float StanByTime = 3.0f;	// 一斉攻撃までの猶予時間
-	private float StanByStartTime;		// 猶予が開始した時刻
+	private float StanByStartTime;      // 猶予が開始した時刻
+    float allOutDelayTime = 0.0f;       // 再一斉攻撃待機時間
+    float maxAllOutDelayTime = 10.0f;   // 再一斉攻撃待機最大時間
+    bool isAllOutAttackDelay = false;   // 一斉攻撃待機中か
 
 	// 外のクラスにまとめた関数集
 	private GeneralFunc generalFunc;
@@ -41,7 +44,8 @@ public class BoatManager : MonoBehaviour {
 		japBoats = boats;
 
 		passTime = Time.time;       // 経過時間に現在の時間を設定
-	}
+        allOutDelayTime = maxAllOutDelayTime;   // 一斉攻撃待機時間設定
+    }
 
 	// 削除されたボートをListから削除
 	private void DeleteBoats()
@@ -98,6 +102,9 @@ public class BoatManager : MonoBehaviour {
 		// 沈められたボートListの削除
 		this.DeleteBoats ();
 
+        // 一斉攻撃待機処理
+        DelayAllOutAttack();
+
 		// 一斉攻撃に移るかチェック
 		CheckAllOutAttack ();
 		AllOutAttack ();
@@ -106,9 +113,26 @@ public class BoatManager : MonoBehaviour {
 		this.CreateBoat();
 	}
 
+    // 一斉攻撃待機処理
+    void DelayAllOutAttack()
+    {
+        // 一斉攻撃待機中でなければ処理しない
+        if (!isAllOutAttackDelay) return;
+
+        allOutDelayTime -= Time.deltaTime;
+        if(allOutDelayTime <= 0.0f)
+        {
+            isAllOutAttackDelay = false;    // 待機解除
+            allOutDelayTime = maxAllOutDelayTime; // 再設定
+        }
+
+    }
+
 	// 一斉攻撃の準備に入るかチェック
 	private void CheckAllOutAttack()
 	{
+        // 一斉攻撃待機中か
+        if (isAllOutAttackDelay) return;
 		// 一斉攻撃フラグが立ってたら以降の処理は不要
 		if (AllOutAttackEnable) return;
 		// ボート数が最大でなかったら一斉攻撃フラグお解除
@@ -147,7 +171,7 @@ public class BoatManager : MonoBehaviour {
 		}
 		// メソッドを抜ける前にフラグを戻しておく
 		AllOutAttackEnable = false;
-		//StanByStartTime = Time.time;
-;
+        // 一斉攻撃を待機する
+        isAllOutAttackDelay = true;
 	}
 }

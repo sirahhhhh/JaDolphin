@@ -29,7 +29,7 @@ public class SpearManager : MonoBehaviour {
 	{
 		// 発射可能な最大数の銛を撃っていたら攻撃しない
 		// 一斉攻撃フラグが立っている時は無視
-		if (spears.Count >= maxSpears[(int)boatType] && !AllOutAttack) return isAttack;
+		if (spears.Count >= maxSpears[(int)boatType] && AllOutAttack) return isAttack;
 		// 攻撃中なら中断
 		if (isAttack) return isAttack;
 

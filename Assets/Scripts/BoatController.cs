@@ -101,13 +101,17 @@ public class BoatController : MonoBehaviour {
             else Act();	// 行動後時間中でなければ行動
         }
 
-		// 一斉攻撃待機中か確認
-		bool AllOutAttackStandBy = boatManager.AllOutAttackStandBy();
+        // ダメージ時間処理
+        bool IsDamage = boatDamage.Damage();
+
+        // 一斉攻撃待機中か確認
+        bool AllOutAttackStandBy = boatManager.AllOutAttackStandBy();
 		if (AllOutAttackStandBy) return; // 一斉攻撃待機中は普通の攻撃はしないので抜ける
 
         // ダメージ中の処理
 		// ダメージ時間中でなければ攻撃する
-		if(!boatDamage.Damage()){
+		if(!IsDamage)
+        {
 			isAttack = spearManager.Fire (
 				false,
 				isAttack,
