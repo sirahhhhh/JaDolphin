@@ -15,6 +15,12 @@ public class BoatManager : MonoBehaviour {
 	private float passTime; // 生成時に使う経過時間
 	private int DownBoats;  // 沈めたボート数
 
+	// 一斉攻撃用変数
+	private bool AllOutAttackEnable = false;	// 一斉攻撃用フラグ
+	private float StanByTime = 3.0f;	// 一斉攻撃までの猶予時間
+	private float StanByStartTime;		// 猶予が開始した時刻
+
+	// 外のクラスにまとめた関数集
 	private GeneralFunc generalFunc;
 
 	// ボート生成時の最大、最小座標
@@ -89,10 +95,59 @@ public class BoatManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		// ボート生成
-		this.CreateBoat();
-
 		// 沈められたボートListの削除
 		this.DeleteBoats ();
+
+		// 一斉攻撃に移るかチェック
+		CheckAllOutAttack ();
+		AllOutAttack ();
+
+		// ボート生成
+		this.CreateBoat();
+	}
+
+	// 一斉攻撃の準備に入るかチェック
+	private void CheckAllOutAttack()
+	{
+		// 一斉攻撃フラグが立ってたら以降の処理は不要
+		if (AllOutAttackEnable) return;
+		// ボート数が最大でなかったら一斉攻撃フラグお解除
+		if (this.lists.Count != maxJapBoats ) {
+			AllOutAttackEnable = false;
+			return;
+		}
+
+		// ボート数が最大になっていたら待機開始
+		AllOutAttackEnable = true;
+		StanByStartTime = Time.time;
+	}
+
+	public bool AllOutAttackStandBy()
+	{
+		// 一斉攻撃フラグが立っていたら待機状態に以降
+		if (AllOutAttackEnable) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// 一斉攻撃
+	public void AllOutAttack()
+	{
+		// 一斉攻撃フラグが立ってなかったら一斉攻撃に移らない
+		if (!AllOutAttackEnable) return;
+
+		// 待機時間が経過してなければ一斉攻撃には移らない
+		if (Time.time - StanByStartTime <= StanByTime) return;
+
+		// 一斉攻撃フラグが立ち待機時間が過ぎているので一斉攻撃開始
+		for (int i = 0; i < this.lists.Count; i++) {
+			this.lists [i].GetComponentInChildren<BoatController> ().AllOutAttack ();
+		}
+		// メソッドを抜ける前にフラグを戻しておく
+		AllOutAttackEnable = false;
+		//StanByStartTime = Time.time;
+;
 	}
 }

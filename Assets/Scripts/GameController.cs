@@ -98,4 +98,9 @@ public class GameController : MonoBehaviour {
         HasPushRetry = true;
 		SceneManager.LoadScene("DolphinJapan");	
     }
+
+	public BoatManager GetBoatManager()
+	{
+		return boatManager;
+	}
 }
